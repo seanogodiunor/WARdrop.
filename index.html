@@ -1,0 +1,3468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WARdrop. - Your Digital Wardrobe Assistant</title>
+    <meta name="description" content="Your personal digital wardrobe assistant. Organize, plan, and manage your outfits with weather-smart recommendations and AI-powered styling.">
+    <meta name="keywords" content="digital wardrobe, outfit planner, fashion app, wardrobe organizer, style assistant">
+    <link rel="canonical" href="https://wardrobeapp.com">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wardrobeapp.com">
+    <meta property="og:title" content="WARdrobe - Digital Wardrobe App">
+    <meta property="og:description" content="Your personal digital wardrobe assistant with weather-smart planning and outfit creation.">
+    <meta property="og:image" content="https://wardrobeapp.com/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://wardrobeapp.com">
+    <meta property="twitter:title" content="WARdrobe - Digital Wardrobe App">
+    <meta property="twitter:description" content="Your personal digital wardrobe assistant with weather-smart planning and outfit creation.">
+    <meta property="twitter:image" content="https://wardrobeapp.com/og-image.jpg">
+
+    <!-- Google Tag Manager -->
+    <script>
+    (function() {
+        const consent = localStorage.getItem('cookieConsent');
+        if (consent) {
+            const consentData = JSON.parse(consent);
+            if (consentData.analytics) {
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','GTM-WARDROBE');
+            }
+        }
+    })();
+    </script>
+    <!-- End Google Tag Manager -->
+    
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        /* Zombie Dreams Color Palette - Used as accents only */
+        --zombie: #e5d598;        /* Cream/beige accents */
+        --thistle-green: #bdc49e; /* Light green accents */
+        --spanish-green: #829b8b; /* Medium green accents */
+        --como: #4d776a;          /* Dark green accents */
+        --stromboli: #2f5c49;     /* Darkest green accents */
+
+        /* Apple-inspired Base Colors */
+        --background: #ffffff;
+        --background-secondary: #f5f5f7;
+        --background-tertiary: #fafafa;
+        --text-primary: #1d1d1f;
+        --text-secondary: #86868b;
+        --text-tertiary: #6e6e73;
+        --border-color: #d2d2d7;
+        --button-background: #0071e3;
+        --button-hover: #0077ed;
+        
+        /* Dark mode colors */
+        --dark-background: #000000;
+        --dark-background-secondary: #1d1d1f;
+        --dark-background-tertiary: #2d2d2d;
+        --dark-text-primary: #f5f5f7;
+        --dark-text-secondary: #a1a1a6;
+        --dark-text-tertiary: #86868b;
+        --dark-border-color: #424245;
+        
+        /* System font stack like Apple */
+        --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-family);
+        background-color: var(--background);
+        color: var(--text-primary);
+        line-height: 1.47059;
+        font-size: 17px;
+        font-weight: 400;
+        letter-spacing: -.022em;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Global Container */
+      .container {
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .large-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+
+      /* Navigation */
+      .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 48px;
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .logo {
+        font-size: 21px;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+        letter-spacing: -.021em;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 400;
+        transition: color 0.3s ease;
+        letter-spacing: -.016em;
+      }
+
+      .nav-links a:hover {
+        color: var(--como);
+      }
+
+      .cta-nav {
+        background: var(--como);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 980px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        letter-spacing: -.016em;
+      }
+
+      .cta-nav:hover {
+        background: var(--stromboli);
+        transform: scale(1.02);
+      }
+
+      .dark-mode-toggle {
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+      }
+
+      .dark-mode-toggle:hover {
+        background: var(--background-secondary);
+        color: var(--text-primary);
+      }
+
+      /* Mobile Menu - Only show on mobile */
+      .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 12px;
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 48px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+        z-index: 999;
+      }
+
+      .mobile-menu.active {
+        display: block;
+      }
+
+      .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .mobile-nav-links a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 17px;
+        font-weight: 400;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      /* Hero Section */
+      .hero {
+        padding: 120px 0 80px;
+        text-align: center;
+        background: linear-gradient(135deg, var(--background) 0%, rgba(229, 213, 152, 0.03) 100%);
+      }
+
+      .hero-content {
+        max-width: 734px;
+        margin: 0 auto;
+      }
+
+      .hero-headline {
+        font-size: 56px;
+        line-height: 1.07143;
+        font-weight: 600;
+        letter-spacing: -.005em;
+        margin-bottom: 24px;
+        color: var(--text-primary);
+      }
+
+      .hero-subheadline {
+        font-size: 28px;
+        line-height: 1.14286;
+        font-weight: 400;
+        letter-spacing: .007em;
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+      }
+
+      .hero-cta-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 60px;
+        flex-wrap: wrap;
+      }
+
+      .cta-primary {
+        background: var(--como);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 980px;
+        text-decoration: none;
+        font-size: 17px;
+        font-weight: 400;
+        transition: all 0.3s ease;
+        letter-spacing: -.022em;
+        border: none;
+        cursor: pointer;
+      }
+
+      .cta-primary:hover {
+        background: var(--stromboli);
+        transform: scale(1.02);
+      }
+
+      .cta-secondary {
+        color: var(--como);
+        padding: 12px 24px;
+        text-decoration: none;
+        font-size: 17px;
+        font-weight: 400;
+        transition: all 0.3s ease;
+        letter-spacing: -.022em;
+        border: 1px solid var(--como);
+        border-radius: 980px;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .cta-secondary:hover {
+        background: var(--como);
+        color: white;
+      }
+
+      /* Demo Modal Styles */
+      .demo-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+
+      body.demo-open > *:not(.demo-modal) {
+        filter: blur(20px) brightness(0.7);
+        transition: filter 0.4s ease;
+      }
+
+      /* iOS-style translucent backdrop */
+      .demo-modal {
+        backdrop-filter: saturate(180%) blur(5px);
+        -webkit-backdrop-filter: saturate(180%) blur(10px);
+      }
+
+      .demo-modal.show {
+        display: flex;
+      }
+
+      /* iPhone 12 Pro Max width */
+      .demo-modal-content {
+        position: relative;
+        width: 375px;
+        height: 812px;
+        background: #000;
+        border-radius: 40px;
+        padding: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+
+      .demo-close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 0, 0, 0.881);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        font-size: 20px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 2001;
+      }
+
+      .demo-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 32px;
+      }
+
+      /* Design Philosophy Section */
+      .design-section {
+        padding: 100px 0 60px;
+        background: var(--background-secondary);
+        border-radius: 24px;
+        margin: 0 20px;
+      }
+
+      .design-content {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .design-headline {
+        font-size: 48px;
+        line-height: 1.08349;
+        font-weight: 600;
+        letter-spacing: -.003em;
+        color: var(--text-primary);
+        margin-bottom: 24px;
+      }
+
+      .design-subheadline {
+        font-size: 21px;
+        line-height: 1.381;
+        font-weight: 400;
+        letter-spacing: .011em;
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+      }
+
+      .design-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+        text-align: left;
+      }
+
+      .design-element {
+        background: white;
+        padding: 32px;
+        border-radius: 18px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .design-element:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+
+      .design-element h3 {
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+        letter-spacing: -.022em;
+      }
+
+      .design-element p {
+        font-size: 15px;
+        line-height: 1.47059;
+        color: var(--text-secondary);
+        letter-spacing: -.022em;
+      }
+
+      .design-element .design-icon {
+        width: 48px;
+        height: 48px;
+        color: var(--como);
+        font-size: 24px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+      }
+
+      /* App Mode Toggle */
+      .app-mode-toggle {
+        text-align: center;
+        margin: 40px 0;
+      }
+
+      .mode-toggle-btn {
+        background: var(--como);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 980px;
+        border: none;
+        font-size: 17px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: -.022em;
+      }
+
+      .mode-toggle-btn:hover {
+        background: var(--stromboli);
+        transform: scale(1.02);
+      }
+
+      /* Device Showcase */
+      .device-showcase {
+        margin: 80px 0;
+        display: flex;
+        justify-content: flex-start;
+        gap: 30px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 40px 20px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        /* Hide scrollbar */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .device-showcase::-webkit-scrollbar {
+        display: none;
+      }
+
+      .device-container {
+        position: relative;
+        perspective: 1000px;
+        flex-shrink: 0;
+        scroll-snap-align: center;
+      }
+
+      .device-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px 30px 30px;
+        box-shadow: 
+          0 4px 20px rgba(0, 0, 0, 0.08),
+          0 0 0 1px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+        text-align: center;
+        min-width: 320px;
+        max-width: 350px;
+      }
+
+      .device-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 
+          0 20px 40px rgba(0, 0, 0, 0.12),
+          0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+
+      .device-frame {
+        width: 200px;
+        height: 400px;
+        background: linear-gradient(145deg, #1d1d1f, #2d2d2d);
+        border-radius: 36px;
+        padding: 6px;
+        box-shadow: 
+          0 8px 20px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+          0 0 0 2px rgba(0, 0, 0, 0.8);
+        margin: 0 auto 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .device-screen {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        border-radius: 30px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .device-notch {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 45px;
+        height: 16px;
+        background: #000;
+        border-radius: 8px;
+        z-index: 10;
+        box-shadow: 
+          inset 0 0.5px 1px rgba(255, 255, 255, 0.03),
+          0 0.5px 1px rgba(0, 0, 0, 0.15);
+      }
+
+      .device-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 30px;
+        transition: opacity 0.3s ease;
+      }
+
+      .device-image.dark-mode-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+      }
+
+      .device-info {
+        text-align: center;
+      }
+
+      .device-title {
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        letter-spacing: -.022em;
+      }
+
+      .device-description {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.42857;
+        letter-spacing: -.016em;
+        margin-bottom: 16px;
+      }
+
+      .device-badge {
+        display: inline-block;
+        background: var(--background-secondary);
+        color: var(--como);
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: -.012em;
+        text-transform: uppercase;
+      }
+
+      /* Section Styling */
+      .section {
+        padding: 100px 0;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 80px;
+      }
+
+      .section-headline {
+        font-size: 48px;
+        line-height: 1.08349;
+        font-weight: 600;
+        letter-spacing: -.003em;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+      }
+
+      .section-subheadline {
+        font-size: 21px;
+        line-height: 1.381;
+        font-weight: 400;
+        letter-spacing: .011em;
+        color: var(--text-secondary);
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      /* Features Grid */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+      }
+
+      .feature-card {
+        text-align: center;
+        padding: 40px 20px;
+        background: white;
+        border-radius: 24px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      }
+
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: none;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 36px;
+        color: var(--como);
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.05);
+      }
+
+      .feature-title {
+        font-size: 21px;
+        font-weight: 600;
+        letter-spacing: .011em;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .feature-description {
+        font-size: 17px;
+        line-height: 1.47059;
+        color: var(--text-secondary);
+        letter-spacing: -.022em;
+      }
+
+      /* Privacy Section */
+      .privacy-section {
+        background: var(--background-secondary);
+        border-radius: 24px;
+        margin: 80px 0;
+        padding: 80px 40px;
+        text-align: center;
+      }
+
+      .privacy-icon {
+        width: 80px;
+        height: 80px;
+        background: none;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 32px;
+        color: var(--como);
+        font-size: 36px;
+      }
+
+      .privacy-headline {
+        font-size: 40px;
+        font-weight: 600;
+        letter-spacing: -.005em;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+      }
+
+      .privacy-description {
+        font-size: 19px;
+        line-height: 1.42105;
+        color: var(--text-secondary);
+        letter-spacing: .012em;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        text-align: center;
+        padding: 120px 0;
+        background: linear-gradient(135deg, 
+          rgba(229, 213, 152, 0.1) 0%, 
+          rgba(188, 196, 158, 0.1) 50%, 
+          rgba(130, 155, 139, 0.1) 100%);
+        border-radius: 24px;
+        margin: 80px 0;
+      }
+
+      .cta-headline {
+        font-size: 48px;
+        font-weight: 600;
+        letter-spacing: -.003em;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+      }
+
+      .cta-description {
+        font-size: 21px;
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .qr-container {
+        margin: 40px 0;
+      }
+
+      .qr-code {
+        width: 200px;
+        height: 200px;
+        background: white;
+        border-radius: 16px;
+        margin: 0 auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color);
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--background-secondary);
+        border-top: 1px solid var(--border-color);
+        padding: 60px 0 40px;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-section h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        letter-spacing: -.022em;
+      }
+
+      .footer-section a {
+        display: block;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.71429;
+        margin-bottom: 8px;
+        transition: color 0.3s ease;
+        letter-spacing: -.016em;
+      }
+
+      .footer-section a:hover {
+        color: var(--como);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-tertiary);
+        font-size: 14px;
+      }
+
+      /* Cookie Banner */
+      .cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: saturate(180%) blur(20px);
+        border-top: 1px solid var(--border-color);
+        z-index: 10000;
+        display: none;
+        padding: 20px;
+      }
+
+      .cookie-banner.show {
+        display: block;
+      }
+
+      .cookie-content {
+        max-width: 1024px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .cookie-text {
+        flex: 1;
+      }
+
+      .cookie-text h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+      }
+
+      .cookie-text p {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.42857;
+      }
+
+      .cookie-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .cookie-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .cookie-btn.accept-all {
+        background: var(--como);
+        color: white;
+      }
+
+      .cookie-btn.accept-all:hover {
+        background: var(--stromboli);
+      }
+
+      .cookie-btn.essential {
+        background: var(--background-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+
+      .cookie-btn.essential:hover {
+        background: var(--border-color);
+      }
+
+      .cookie-btn.settings {
+        background: transparent;
+        color: var(--como);
+        border: 1px solid var(--como);
+      }
+
+      .cookie-btn.settings:hover {
+        background: var(--como);
+        color: white;
+      }
+
+      /* Dark Mode */
+      body.dark-mode {
+        background-color: var(--dark-background);
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .nav-bar {
+        background: rgba(0, 0, 0, 0.8);
+        border-bottom-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .logo,
+      body.dark-mode .nav-links a {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .nav-links a:hover {
+        color: var(--spanish-green);
+      }
+
+      body.dark-mode .hero {
+        background: linear-gradient(135deg, var(--dark-background) 0%, rgba(130, 155, 139, 0.1) 100%);
+      }
+
+      body.dark-mode .hero-headline {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .hero-subheadline {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .design-section {
+        background: var(--dark-background-secondary);
+      }
+
+      body.dark-mode .design-headline {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .design-subheadline {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .design-element {
+        background: var(--dark-background-secondary);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .design-element:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .design-element h3 {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .design-element p {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .design-element .design-icon {
+        color: var(--zombie);
+      }
+
+      body.dark-mode .section-headline {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .section-subheadline {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .feature-card {
+        background: var(--dark-background-secondary);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .feature-card:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .feature-title {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .feature-description {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .feature-icon {
+        color: var(--zombie);
+      }
+
+      body.dark-mode .privacy-section {
+        background: var(--dark-background-secondary);
+      }
+
+      body.dark-mode .privacy-headline {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .privacy-description {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .privacy-icon {
+        color: var(--zombie);
+      }
+
+      body.dark-mode .cta-section {
+        background: linear-gradient(135deg, 
+          rgba(130, 155, 139, 0.1) 0%, 
+          rgba(77, 119, 106, 0.1) 50%, 
+          rgba(47, 92, 73, 0.1) 100%);
+      }
+
+      body.dark-mode .cta-headline {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .cta-description {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .footer {
+        background: var(--dark-background-secondary);
+        border-top-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .footer-section h3 {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .footer-section a {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .footer-section a:hover {
+        color: var(--spanish-green);
+      }
+
+      body.dark-mode .footer-bottom {
+        color: var(--dark-text-tertiary);
+        border-top-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .cookie-banner {
+        background: rgba(0, 0, 0, 0.95);
+        border-top-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .cookie-text h3 {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .cookie-text p {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .cookie-btn.essential {
+        background: var(--dark-background-secondary);
+        color: var(--dark-text-primary);
+        border-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .cookie-btn.essential:hover {
+        background: var(--dark-border-color);
+      }
+
+      body.dark-mode .mobile-menu {
+        background: rgba(0, 0, 0, 0.95);
+        border-bottom-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .mobile-nav-links a {
+        color: var(--dark-text-primary);
+        border-bottom-color: var(--dark-border-color);
+      }
+
+      body.dark-mode .dark-mode-toggle:hover {
+        background: var(--dark-background-secondary);
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .device-card {
+        background: var(--dark-background-secondary);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .device-card:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-mode .device-title {
+        color: var(--dark-text-primary);
+      }
+
+      body.dark-mode .device-description {
+        color: var(--dark-text-secondary);
+      }
+
+      body.dark-mode .device-badge {
+        background: var(--dark-background-tertiary);
+        color: var(--zombie);
+      }
+
+      /* App Preview Mode - Show dark mode images when active */
+      body.app-dark-preview .device-image:not(.dark-mode-image) {
+        opacity: 0;
+      }
+
+      body.app-dark-preview .device-image.dark-mode-image {
+        opacity: 1;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .large-container {
+          padding: 0 30px;
+        }
+        
+        .device-showcase {
+          gap: 20px;
+          padding: 40px 30px 60px 30px;
+        }
+        
+        .device-card {
+          width: 300px;
+          padding: 30px 20px 25px;
+        }
+        
+        .device-frame {
+          width: 180px;
+          height: 360px;
+          border-radius: 32px;
+        }
+
+        .device-screen {
+          border-radius: 26px;
+        }
+
+        .device-image {
+          border-radius: 26px;
+        }
+
+        .device-notch {
+          top: 7px;
+          width: 38px;
+          height: 14px;
+          border-radius: 7px;
+        }
+
+        .features-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 25px;
+        }
+
+        .feature-card {
+          padding: 35px 25px;
+        }
+
+        .feature-icon {
+          width: 70px;
+          height: 70px;
+          font-size: 32px;
+        }
+
+        .design-grid {
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 30px;
+        }
+
+        .design-element {
+          padding: 28px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        
+        .mobile-menu-toggle {
+          display: flex;
+        }
+        
+        .hero-headline {
+          font-size: 40px;
+        }
+        
+        .hero-subheadline {
+          font-size: 21px;
+        }
+        
+        .section-headline {
+          font-size: 32px;
+        }
+        
+        .cta-headline {
+          font-size: 32px;
+        }
+
+        .design-headline {
+          font-size: 32px;
+        }
+
+        .design-subheadline {
+          font-size: 19px;
+        }
+        
+        .hero-cta-container {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .cookie-content {
+          flex-direction: column;
+          text-align: center;
+          gap: 16px;
+        }
+        
+        .cookie-buttons {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        
+        .device-showcase {
+          gap: 15px;
+          padding: 30px 20px 50px 20px;
+          margin-top: 60px;
+          margin-bottom: 60px;
+        }
+        
+        .device-card {
+          width: 280px;
+          padding: 25px 15px 20px;
+        }
+        
+        .device-frame {
+          width: 160px;
+          height: 320px;
+          border-radius: 28px;
+        }
+
+        .device-screen {
+          border-radius: 22px;
+        }
+
+        .device-image {
+          border-radius: 22px;
+        }
+
+        .device-notch {
+          top: 6px;
+          width: 32px;
+          height: 12px;
+          border-radius: 6px;
+        }
+
+        .device-title {
+          font-size: 17px;
+        }
+
+        .device-description {
+          font-size: 13px;
+        }
+
+        .features-grid {
+          display: flex;
+          flex-direction: row;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          gap: 20px;
+          padding-bottom: 20px;
+          margin: 0 -10px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+
+        .feature-card {
+          flex: 0 0 auto;
+          scroll-snap-align: start;
+          width: 240px;
+          height: 320px;
+          min-width: 240px;
+          max-width: 240px;
+          padding: 30px 20px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-top: 10px;
+        }
+
+        .feature-icon {
+          width: 64px;
+          height: 64px;
+          font-size: 28px;
+          margin-bottom: 20px;
+        }
+
+        .feature-title {
+          font-size: 18px;
+          margin-bottom: 16px;
+        }
+
+        .feature-description {
+          font-size: 14px;
+          line-height: 1.4;
+        }
+
+        /* Hide horizontal scrollbar but keep functionality */
+        .features-grid::-webkit-scrollbar {
+          display: none;
+        }
+        .features-grid {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+
+        .design-section {
+          padding: 60px 20px;
+          margin: 60px 20px;
+        }
+
+        .design-grid {
+          display: flex;
+          flex-direction: row;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          gap: 20px;
+          padding-bottom: 20px;
+          margin: 0 -10px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+
+        .design-element {
+          flex: 0 0 auto;
+          scroll-snap-align: start;
+          width: 240px;
+          height: 320px;
+          min-width: 240px;
+          max-width: 240px;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-top: 10px;
+        }
+
+        .design-element h3 {
+          font-size: 17px;
+        }
+
+        .design-element p {
+          font-size: 14px;
+        }
+
+        /* Hide horizontal scrollbar but keep functionality */
+        .design-grid::-webkit-scrollbar {
+          display: none;
+        }
+        .design-grid {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        
+        .privacy-section {
+          padding: 60px 20px;
+        }
+        
+        .cta-section {
+          padding: 80px 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 0 16px;
+        }
+        
+        .nav-content {
+          padding: 0 16px;
+        }
+        
+        .hero {
+          padding: 100px 0 60px;
+        }
+        
+        .hero-headline {
+          font-size: 32px;
+        }
+        
+        .hero-subheadline {
+          font-size: 19px;
+        }
+        
+        .section {
+          padding: 60px 0;
+        }
+        
+        .features-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        
+        .device-showcase {
+          gap: 10px;
+          padding: 20px 15px 40px 15px;
+        }
+        
+        .device-card {
+          width: 260px;
+          padding: 20px 12px 16px;
+        }
+        
+        .device-frame {
+          width: 140px;
+          height: 280px;
+          border-radius: 24px;
+        }
+
+        .device-screen {
+          border-radius: 18px;
+        }
+
+        .device-image {
+          border-radius: 18px;
+        }
+
+        .device-notch {
+          top: 5px;
+          width: 28px;
+          height: 10px;
+          border-radius: 5px;
+        }
+
+        .device-title {
+          font-size: 16px;
+        }
+
+        .device-description {
+          font-size: 12px;
+          margin-bottom: 12px;
+        }
+
+        .device-badge {
+          font-size: 11px;
+          padding: 3px 10px;
+        }
+
+        .feature-card {
+          flex: 0 0 auto;
+          scroll-snap-align: start;
+          width: 220px;
+          height: 300px;
+          min-width: 220px;
+          max-width: 220px;
+          padding: 25px 15px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-top: 10px;
+        }
+
+        .feature-icon {
+          width: 56px;
+          height: 56px;
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+
+        .feature-title {
+          font-size: 17px;
+        }
+
+        .feature-description {
+          font-size: 14px;
+        }
+
+        .design-section {
+          padding: 40px 16px;
+          margin: 40px 16px;
+        }
+
+        .design-headline {
+          font-size: 28px;
+        }
+
+        .design-subheadline {
+          font-size: 17px;
+        }
+
+        .design-element {
+          flex: 0 0 auto;
+          scroll-snap-align: start;
+          width: 220px;
+          height: 300px;
+          min-width: 220px;
+          max-width: 220px;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          margin-top: 10px;
+        }
+
+        .design-element .design-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+          margin-bottom: 12px;
+        }
+
+        .design-element h3 {
+          font-size: 16px;
+        }
+
+        .design-element p {
+          font-size: 13px;
+        }
+      }
+
+      /* Smooth animations */
+      * {
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+      }
+
+      /* Hide scrollbar while keeping functionality */
+      html {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      
+      html::-webkit-scrollbar {
+        display: none;
+      }
+
+
+      /* Notification*/
+
+      .ios-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.ios-modal.show {
+  display: flex;
+}
+
+.ios-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 280px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.ios-modal-title {
+  font-weight: 600;
+  color: #000000;
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.ios-modal-message {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.ios-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ios-modal-buttons button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ios-cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.ios-confirm {
+  background: #4d776a;
+  color: white;
+}
+
+
+
+
+
+
+    </style>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WARDROBE"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+      <div class="nav-content">
+        <a href="#" class="logo">WARdrop.</a>
+        
+        <div class="nav-links">
+          <a href="#design" onclick="trackNavClick('design')">Design Philosophy</a>
+          <a href="#features" onclick="trackNavClick('features')">Key Features</a>
+          <a href="#how-it-works" onclick="trackNavClick('how-it-works')">How It Works</a>
+          <a href="#privacy" onclick="trackNavClick('privacy')">Privacy & Security</a>
+          <a href="#contact" onclick="trackNavClick('contact')">Get In Touch</a>
+          <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon"></i>
+          </button>
+          <a href="#download" class="cta-nav" onclick="trackCTAClick('nav-cta', 'Download Now')">Download Now</a>
+        </div>
+        
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-nav-links">
+        <a href="#design" onclick="closeMobileMenu(); trackNavClick('design-mobile')">Design Philosophy</a>
+        <a href="#features" onclick="closeMobileMenu(); trackNavClick('features-mobile')">Key Features</a>
+        <a href="#how-it-works" onclick="closeMobileMenu(); trackNavClick('how-it-works-mobile')">How It Works</a>
+        <a href="#privacy" onclick="closeMobileMenu(); trackNavClick('privacy-mobile')">Privacy & Security</a>
+        <a href="#contact" onclick="closeMobileMenu(); trackNavClick('contact-mobile')">Get In Touch</a>
+        <div style="padding: 20px 0; border-bottom: 1px solid var(--border-color);">
+          <button class="dark-mode-toggle" id="mobileDarkModeToggle" onclick="toggleDarkMode()" style="width: 100%; justify-content: flex-start; padding: 12px 0; background: none; border: none; font-size: 17px; color: var(--text-primary);">
+            <i class="fas fa-moon" style="margin-right: 12px;"></i>
+            <span id="darkModeText">Dark Mode</span>
+          </button>
+        </div>
+        <a href="#download" onclick="closeMobileMenu(); trackCTAClick('mobile-nav-cta', 'Download Now')">Download Now</a>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-headline">Your digital wardrobe.<br>Perfectly organized.</h1>
+          <p class="hero-subheadline">Effortlessly manage your style with intelligent outfit planning, weather-smart recommendations, and seamless organization.</p>
+          
+          <div class="hero-cta-container">
+            <button class="cta-primary" onclick="trackCTAClick('hero-primary', 'Download for iOS'); showComingSoonModal();">Download for iOS</button>
+            <button class="cta-secondary" onclick="openDemoModal()">WARdrop. Demo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo Modal -->
+    <div class="demo-modal" id="demoModal">
+      <div class="demo-modal-content">
+        <button class="demo-close-button" onclick="closeDemoModal()">X</button>
+        <iframe id="demoIframe" class="demo-iframe" src="demo.html"></iframe>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmExitModal" class="ios-modal">
+      <div class="ios-modal-content">
+        <p class="ios-modal-title">Exiting WARdrop.</p>
+        <p class="ios-modal-message">Are you sure you want to exit?</p>
+        <div class="ios-modal-buttons">
+          <button onclick="closeConfirmModal()" class="ios-cancel">Cancel</button>
+          <button onclick="confirmExit()" class="ios-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Philosophy Section -->
+    <section class="design-section" id="design">
+      <div class="container">
+        <div class="design-content">
+          <h2 class="design-headline">Thoughtful Design</h2>
+          <p class="design-subheadline">Every element of WARdrop. is crafted with intention, combining Apple's design philosophy with modern fashion sensibilities to create an experience that feels both familiar and revolutionary.</p>
+          
+          <div class="design-grid">
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-palette"></i>
+              </div>
+              <h3>Color Psychology</h3>
+              <p>Our carefully curated color palette uses earthy greens and warm creams to create a calming, natural environment that puts your clothing front and center.</p>
+            </div>
+
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-feather-alt"></i>
+              </div>
+              <h3>Minimalist Interface</h3>
+              <p>Clean lines, generous white space, and intuitive navigation ensure that nothing distracts from your wardrobe. Every pixel serves a purpose.</p>
+            </div>
+
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <h3>Mobile-First Approach</h3>
+              <p>Designed specifically for iOS, with gestures and interactions that feel natural and responsive. Your wardrobe fits perfectly in your pocket.</p>
+            </div>
+
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-universal-access"></i>
+              </div>
+              <h3>Accessibility Focused</h3>
+              <p>Built with VoiceOver support, high contrast modes, and dynamic type scaling to ensure everyone can organize their style with confidence.</p>
+            </div>
+
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-magic"></i>
+              </div>
+              <h3>Delightful Interactions</h3>
+              <p>Subtle animations and haptic feedback create moments of joy throughout your wardrobe management journey, making organization feel effortless.</p>
+            </div>
+
+            <div class="design-element">
+              <div class="design-icon">
+                <i class="fas fa-adjust"></i>
+              </div>
+              <h3>Adaptive Themes</h3>
+              <p>Seamlessly transitions between light and dark modes, automatically adapting to your device settings and time of day preferences.</p>
+            </div>
+          </div>
+
+          <div class="app-mode-toggle">
+            <button class="mode-toggle-btn" id="appModeToggle" onclick="toggleAppPreviewMode()">
+              WARdrop. in Dark Mode
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Device Showcase - Now with dual images -->
+    <div class="device-showcase">
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/home-dark.png" alt="WARdrobe Home Screen Light Mode" class="device-image">
+              <img src="images/dark/home.png" alt="WARdrobe Home Screen Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Home Dashboard</h3>
+            <p class="device-description">Your style hub at a glance with weather integration and outfit suggestion.</p>
+            <span class="device-badge">Main Screen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/favs-dark.png" alt="WARdrobe Favorites Light Mode" class="device-image">
+              <img src="images/dark/favs.png" alt="WARdrobe Favorites Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Favs Selection</h3>
+            <p class="device-description">Build your personal list of favorites for faster browsing and easy recall.</p>
+            <span class="device-badge">Favorites</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/collections-dark.png" alt="WARdrobe Collection Light Mode" class="device-image">
+              <img src="images/dark/collections.png" alt="WARdrobe Collection Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Smart Collection</h3>
+            <p class="device-description">Group your items into collections for easy manage and access.</p>
+            <span class="device-badge">Collections</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/search-dark.png" alt="WARdrobe Search Light Mode" class="device-image">
+              <img src="images/dark/search.png" alt="WARdrobe Search Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Advanced Search</h3>
+            <p class="device-description">Find exactly what you need with powerful filters and smart search tools.</p>
+            <span class="device-badge">Search</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/weather-dark.png" alt="WARdrobe Weather Light Mode" class="device-image">
+              <img src="images/dark/weather.png" alt="WARdrobe Weather Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Weather Integration</h3>
+            <p class="device-description">Weather insights built in—helping you make the right choices, whatever the weather.</p>
+            <span class="device-badge">Weather</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="device-container">
+        <div class="device-card">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+              <img src="images/light/share-dark.png" alt="WARdrobe Share Light Mode" class="device-image">
+              <img src="images/dark/share.png" alt="WARdrobe Share Dark Mode" class="device-image dark-mode-image">
+            </div>
+          </div>
+          <div class="device-info">
+            <h3 class="device-title">Share Option</h3>
+            <p class="device-description">Easily share your favorites with friends, family and across your favorite apps.</p>
+            <span class="device-badge">Share</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Features Section -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-headline">Key Features</h2>
+          <p class="section-subheadline">Every feature is designed to make managing your wardrobe effortless and enjoyable, with the intelligence you expect from a modern app.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" onclick="trackFeatureClick('Weather-Smart Planning')">
+            <div class="feature-icon">
+              <i class="fas fa-cloud-sun"></i>
+            </div>
+            <h3 class="feature-title">Weather-Smart Planning</h3>
+            <p class="feature-description">Plan your outfits with real-time weather insights to ensure you're always dressed appropriately.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackFeatureClick('Intelligent Search')">
+            <div class="feature-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3 class="feature-title">Intelligent Search</h3>
+            <p class="feature-description">Quickly find your saved outfits by name or date, making it easy to manage and retrieve your wardrobe favorites.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackFeatureClick('Clean, Focused Design')">
+            <div class="feature-icon">
+              <i class="fas fa-stream"></i>
+            </div>
+            <h3 class="feature-title">Clean, Focused Design</h3>
+            <p class="feature-description">Enjoy a minimalist and distraction-free interface that helps you focus solely on managing your wardrobe.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackFeatureClick('Digital Cataloging')">
+            <div class="feature-icon">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h3 class="feature-title">Digital Cataloging</h3>
+            <p class="feature-description">Easily photograph and categorize your entire wardrobe into four essential categories.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackFeatureClick('Outfit Creator')">
+            <div class="feature-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="feature-title">Outfit Creator</h3>
+            <p class="feature-description">Create and save your favorite outfit combinations with our intelligent builder.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackFeatureClick('Customizable Experience')">
+            <div class="feature-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <h3 class="feature-title">Customizable Experience</h3>
+            <p class="feature-description">Make the app truly yours with customizable dashboard icons and themes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-headline">How It Works</h2>
+          <p class="section-subheadline">Simple steps to organize your digital wardrobe and revolutionize how you plan your outfits.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" onclick="trackWorkflowClick('Photo Integration')">
+            <div class="feature-icon">
+              <i class="fas fa-camera"></i>
+            </div>
+            <h3 class="feature-title">Photo Integration</h3>
+            <p class="feature-description">Add your clothes to your collection directly from your photo gallery or take new photos using your camera.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackWorkflowClick('Background Removal')">
+            <div class="feature-icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3 class="feature-title">Background Removal</h3>
+            <p class="feature-description">Our API removes unnecessary background distractions, giving you a clear, realistic model of your clothing.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackWorkflowClick('Categorization')">
+            <div class="feature-icon">
+              <i class="fas fa-tags"></i>
+            </div>
+            <h3 class="feature-title">Categorization</h3>
+            <p class="feature-description">Categorize each item as a shirt, jeans, shoes, or accessory and manage them with ease.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackWorkflowClick('Secure Storage')">
+            <div class="feature-icon">
+              <i class="fas fa-database"></i>
+            </div>
+            <h3 class="feature-title">Secure Storage</h3>
+            <p class="feature-description">All items are securely saved in our database, allowing you to view or delete them anytime.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy & Security Section -->
+    <section class="section" id="privacy">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-headline">Privacy & Security</h2>
+          <p class="section-subheadline">Your personal style is yours alone. We're committed to protecting your privacy and securing your data.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" onclick="trackPrivacyClick('No Data Collection')">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="feature-title">No Data Collection</h3>
+            <p class="feature-description">WARdrobe never collects data for advertising purposes. Your personal style choices remain private.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackPrivacyClick('No Ads or Recommendations')">
+            <div class="feature-icon">
+              <i class="fas fa-ban"></i>
+            </div>
+            <h3 class="feature-title">No Ads or Recommendations</h3>
+            <p class="feature-description">We don't push shopping recommendations or product advertisements, ensuring a distraction-free experience.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackPrivacyClick('Data Security')">
+            <div class="feature-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h3 class="feature-title">Data Security</h3>
+            <p class="feature-description">Your personal style choices and outfit combinations are securely stored and not shared with third parties.</p>
+          </div>
+
+          <div class="feature-card" onclick="trackPrivacyClick('Complete Privacy')">
+            <div class="feature-icon">
+              <i class="fas fa-user-secret"></i>
+            </div>
+            <h3 class="feature-title">Complete Privacy</h3>
+            <p class="feature-description">Focus solely on organizing and managing your existing wardrobe without compromising your privacy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Get In Touch Section -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-headline">Get In Touch</h2>
+          <p class="section-subheadline">Have questions or feedback? We'd love to hear from you.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" onclick="openEmailApp()">
+            <div class="feature-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="feature-title">Email Support</h3>
+            <p class="feature-description">info@wardrobeapp.com<br><small style="opacity: 0.7;">We typically respond within 24 hours</small></p>
+          </div>
+
+          <div class="feature-card" onclick="openInstagramApp()">
+            <div class="feature-icon">
+              <i class="fab fa-instagram"></i>
+            </div>
+            <h3 class="feature-title">Follow on Instagram</h3>
+            <p class="feature-description">@wardrop_app<br><small style="opacity: 0.7;">Latest updates and behind-the-scenes content</small></p>
+          </div>
+            
+          <div class="feature-card" onclick="trackContactClick('feedback'); openFeedbackModal();">
+            <div class="feature-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="feature-title">Send Feedback</h3>
+            <p class="feature-description">Help us improve<br><small style="opacity: 0.7;">Your suggestions matter to us</small></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" id="download">
+      <div class="container">
+        <div class="cta-section">
+          <h2 class="cta-headline">Get WARdrop.</h2>
+          <p class="cta-description">Available soon on the App Store. Be the first to experience the future of wardrobe management.</p>
+          
+          <div class="qr-container">
+            <img src="images/WARdrop.png" alt="Download QR Code" class="qr-code">
+          </div>
+          
+          <div class="hero-cta-container">
+            <button class="cta-primary" onclick="trackCTAClick('cta-primary', 'Notify Me'); showNotifyModal();">Notify me at launch</button>
+            <a href="mailto:info@wardrobeapp.com" class="cta-secondary" onclick="trackContactClick('email-cta')">Contact us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>WARdrop.</h3>
+            <a href="#design" onclick="trackFooterClick('design-philosophy')">Design Philosophy</a>
+            <a href="#features" onclick="trackFooterClick('key-features')">Key Features</a>
+            <a href="#how-it-works" onclick="trackFooterClick('how-it-works')">How It Works</a>
+            <a href="#privacy" onclick="trackFooterClick('privacy-security')">Privacy & Security</a>
+            <a href="#contact" onclick="trackFooterClick('get-in-touch')">Get In Touch</a>
+            <a href="#download" onclick="trackFooterClick('download')">Download</a>
+          </div>
+          
+          <div class="footer-section">
+            <h3>Support</h3>
+            <a href="mailto:info@wardrobeapp.com" onclick="trackFooterClick('support-email')">Contact Support</a>
+            <a href="#" onclick="trackFooterClick('faq')">FAQ</a>
+          </div>
+          
+          <div class="footer-section">
+            <h3>Company</h3>
+            <a href="#" onclick="trackFooterClick('about')">About Us</a>
+            <a href="https://instagram.com/wardrop_app" target="_blank" onclick="trackSocialClick('instagram-footer')">Instagram</a>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; 2025 WARdrop. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+      <div class="cookie-content">
+        <div class="cookie-text">
+          <h3>We value your privacy</h3>
+          <p>We use cookies to enhance your experience and improve our app. Choose your preferences to continue.</p>
+        </div>
+        <div class="cookie-buttons">
+          <button class="cookie-btn accept-all" onclick="acceptAllCookies()">Accept All</button>
+          <button class="cookie-btn essential" onclick="acceptEssentialOnly()">Essential Only</button>
+          <button class="cookie-btn settings" onclick="showCookieSettings()">Customize</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cookie Modal -->
+    <div id="cookieModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001; align-items: center; justify-content: center;">
+      <div style="background: var(--background); border-radius: 18px; max-width: 480px; margin: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="color: var(--text-primary); margin: 0; font-size: 21px; font-weight: 600;">Cookie Preferences</h2>
+          <button onclick="closeCookieSettings()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary);">&times;</button>
+        </div>
+        <div style="margin-bottom: 32px;">
+          <div style="margin-bottom: 24px; padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 style="color: var(--text-primary); margin: 0; font-size: 17px; font-weight: 600;">Essential Cookies</h3>
+              <div style="width: 44px; height: 24px; background: var(--como); border-radius: 12px; position: relative;">
+                <div style="position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: white; border-radius: 50%;"></div>
+              </div>
+            </div>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.4;">Required for basic website functionality. These cannot be disabled.</p>
+          </div>
+          <div style="padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 style="color: var(--text-primary); margin: 0; font-size: 17px; font-weight: 600;">Analytics Cookies</h3>
+              <div id="analyticsToggle" onclick="toggleAnalytics()" style="width: 44px; height: 24px; background: var(--border-color); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s;">
+                <div id="analyticsSlider" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: left 0.3s;"></div>
+              </div>
+            </div>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.4;">Help us understand how you use our website to improve the experience.</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button onclick="closeCookieSettings()" style="padding: 8px 16px; background: var(--background-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-size: 14px;">Cancel</button>
+          <button onclick="saveCustomSettings()" style="padding: 8px 16px; background: var(--como); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">Save Preferences</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10002; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+      <div style="
+        background: var(--background);
+        border-radius: 24px;
+        max-width: 480px;
+        width: 90%;
+        margin: 20px;
+        padding: 48px;
+        text-align: center;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        max-height: 735px;
+        overflow-y: auto;
+      ">
+        <div style="
+          width: 88px;
+          height: 88px;
+          background: linear-gradient(135deg, var(--spanish-green), var(--como));
+          border-radius: 22px;
+          margin: 0 auto 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 40px;
+          color: white;
+        ">💬</div>
+        
+        <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">Send Feedback</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+          Your feedback helps us improve WARdrop. and create a better experience for everyone.
+        </p>
+        
+        <form id="feedbackForm" action="https://formsubmit.co/5a6b624eb27a723c8f6de854bd0415f4" method="POST" style="text-align: left;">
+          <input type="hidden" name="_subject" value="New Feedback Submission from WARdrobe">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="box">
+          <input type="hidden" name="_next" value="https://seanogodiunor.github.io/WARdrop./">
+          
+          <div style="margin-bottom: 20px;">
+            <label for="feedbackName" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Name</label>
+            <input type="text" id="feedbackName" name="name" required
+              style="width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); transition: border-color 0.3s ease;"
+              placeholder="Your name"
+              onfocus="this.style.borderColor='var(--como)'"
+              onblur="this.style.borderColor='var(--border-color)'">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label for="feedbackEmail" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Email Address</label>
+            <input type="email" id="feedbackEmail" name="email" required
+              style="width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); transition: border-color 0.3s ease;"
+              placeholder="your@email.com"
+              onfocus="this.style.borderColor='var(--como)'"
+              onblur="this.style.borderColor='var(--border-color)'">
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label for="feedbackType" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Feedback Type</label>
+            <select id="feedbackType" name="type" required
+              style="width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); appearance: none; -webkit-appearance: none; -moz-appearance: none; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='var(--como)'"
+              onblur="this.style.borderColor='var(--border-color)'">
+              <option value="General Feedback" selected>General Feedback</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Design Suggestion">Design Suggestion</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Appreciation">Appreciation</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 32px;">
+            <label for="feedbackMessage" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Message</label>
+            <textarea
+              id="feedbackMessage"
+              name="message"
+              required
+              placeholder="Share your thoughts, suggestions, or feedback with us..."
+              style="width: 100%; height: 120px; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); resize: vertical; transition: border-color 0.3s ease; font-family: inherit;"
+              onfocus="this.style.borderColor='var(--como)'"
+              onblur="this.style.borderColor='var(--border-color)'"
+            ></textarea>
+          </div>
+
+          <div style="display: flex; gap: 12px; justify-content: center;">
+            <button type="button" onclick="closeFeedbackModal()" style="
+              padding: 12px 24px;
+              background: var(--background-secondary);
+              color: var(--text-primary);
+              border: 1px solid var(--border-color);
+              border-radius: 980px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: 500;
+              transition: all 0.3s ease;
+              letter-spacing: -.022em;
+            " onmouseover="this.style.background='var(--border-color)'" 
+               onmouseout="this.style.background='var(--background-secondary)'">
+              Cancel
+            </button>
+            
+            <button type="submit" style="
+              padding: 12px 24px;
+              background: var(--como);
+              color: white;
+              border: none;
+              border-radius: 980px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-size: 16px;
+              letter-spacing: -.022em;
+            " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+               onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+              Send Feedback
+            </button>
+          </div>
+        </form>
+        
+        <div id="feedbackStatus" style="margin-top: 20px; font-size: 14px;"></div>
+      </div>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script>
+      // Cookie Management System
+      let analyticsEnabled = false;
+      let appPreviewMode = false; // Track whether we're showing dark mode app previews
+
+      class CookieManager {
+        constructor() {
+          this.consent = this.getConsent();
+          this.init();
+        }
+
+        init() {
+          if (!this.consent.timestamp || this.isConsentExpired()) {
+            setTimeout(() => this.showBanner(), 2000);
+          } else {
+            this.loadScripts();
+          }
+        }
+
+        isConsentExpired() {
+          if (!this.consent.timestamp) return true;
+          const consentDate = new Date(this.consent.timestamp);
+          const now = new Date();
+          const daysDiff = (now - consentDate) / (1000 * 60 * 60 * 24);
+          return daysDiff > 365;
+        }
+
+        showBanner() {
+          document.getElementById('cookieBanner').classList.add('show');
+          this.trackEvent('cookie_banner_shown');
+        }
+
+        hideBanner() {
+          document.getElementById('cookieBanner').classList.remove('show');
+        }
+
+        getConsent() {
+          const consent = localStorage.getItem('cookieConsent');
+          return consent ? JSON.parse(consent) : {
+            essential: true,
+            analytics: false,
+            timestamp: null,
+            version: '1.0'
+          };
+        }
+
+        saveConsent(consent) {
+          consent.timestamp = new Date().toISOString();
+          consent.version = '1.0';
+          localStorage.setItem('cookieConsent', JSON.stringify(consent));
+          this.consent = consent;
+          this.loadScripts();
+          this.hideBanner();
+          
+          this.trackEvent('cookie_consent_saved', {
+            analytics: consent.analytics,
+            essential: consent.essential
+          });
+        }
+
+        loadScripts() {
+          if (this.consent.analytics && !window.gtag) {
+            this.loadAnalytics();
+          }
+          console.log('🍪 Scripts loaded based on consent:', this.consent);
+        }
+
+        loadAnalytics() {
+          window.dataLayer = window.dataLayer || [];
+          
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=GA-WARDROBE-123';
+          document.head.appendChild(script);
+          
+          script.onload = () => {
+            window.gtag = function() {
+              dataLayer.push(arguments);
+            };
+            gtag('js', new Date());
+            gtag('config', 'GA-WARDROBE-123', {
+              anonymize_ip: true,
+              cookie_flags: 'secure;samesite=lax'
+            });
+            console.log('📊 Analytics loaded');
+          };
+        }
+
+        trackEvent(eventName, parameters = {}) {
+          if (window.gtag && this.consent.analytics) {
+            gtag('event', eventName, parameters);
+          }
+          console.log('📊 Event tracked:', eventName, parameters);
+        }
+      }
+
+      // Initialize Cookie Manager
+      const cookieManager = new CookieManager();
+
+      // Enhanced form submission handling with proper confirmations
+      let formHandlersInitialized = false;
+      
+      function handleFormSubmission() {
+          // Prevent duplicate initialization
+          if (formHandlersInitialized) {
+              return;
+          }
+          formHandlersInitialized = true;
+          
+          // Feedback Form Handler - Use form submit event instead of click
+          document.addEventListener('submit', function(e) {
+              if (e.target && e.target.id === 'feedbackForm') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  const form = e.target;
+                  const nameField = document.getElementById('feedbackName');
+                  const emailField = document.getElementById('feedbackEmail');
+                  const typeField = document.getElementById('feedbackType');
+                  const messageField = document.getElementById('feedbackMessage');
+                  
+                  // Validate form
+                  if (!nameField.value.trim() || !emailField.value.trim() || !messageField.value.trim()) {
+                      showFeedbackStatus('Please fill in all required fields.', 'error');
+                      return;
+                  }
+                  
+                  // Email validation
+                  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailPattern.test(emailField.value.trim())) {
+                      showFeedbackStatus('Please enter a valid email address.', 'error');
+                      return;
+                  }
+                  
+                  // Disable submit button
+                  const submitButton = form.querySelector('button[type="submit"]');
+                  const originalText = submitButton.textContent;
+                  submitButton.disabled = true;
+                  submitButton.textContent = 'Sending...';
+                  
+                  // Track submission attempt
+                  if (typeof cookieManager !== 'undefined') {
+                      cookieManager.trackEvent('feedback_submit_attempt', {
+                          event_category: 'Form',
+                          event_label: 'Feedback Form',
+                          feedback_type: typeField.value
+                      });
+                  }
+                  
+                  // Create FormData
+                  const formData = new FormData(form);
+                  
+                  // Submit to FormSubmit
+                  fetch(form.action, {
+                      method: 'POST',
+                      body: formData
+                  })
+                  .then(response => {
+                      submitButton.disabled = false;
+                      submitButton.textContent = originalText;
+                      
+                      if (response.ok) {
+                          showFeedbackSuccess();
+                          
+                          // Track successful submission
+                          if (typeof cookieManager !== 'undefined') {
+                              cookieManager.trackEvent('feedback_submit_success', {
+                                  event_category: 'Form',
+                                  event_label: 'Feedback Form',
+                                  feedback_type: typeField.value
+                              });
+                          }
+                      } else {
+                          showFeedbackStatus('Something went wrong. Please try again.', 'error');
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Feedback form submission error:', error);
+                      submitButton.disabled = false;
+                      submitButton.textContent = originalText;
+                      showFeedbackStatus('Network error. Please check your connection and try again.', 'error');
+                  });
+              }
+              
+              // Notify Form Handler
+              if (e.target && e.target.id === 'notifyForm') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  const form = e.target;
+                  const nameField = document.getElementById('notifyName');
+                  const emailField = document.getElementById('notifyEmail');
+                  const consentField = document.getElementById('notifyConsent');
+                  
+                  const name = nameField?.value.trim() || '';
+                  const email = emailField?.value.trim() || '';
+                  const consent = consentField?.checked;
+                  
+                  // Validation
+                  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailPattern.test(email)) {
+                      showNotifyStatus('Please enter a valid email address.', 'error');
+                      return;
+                  }
+                  
+                  if (!consent) {
+                      showNotifyStatus('Please agree to receive email notifications.', 'error');
+                      return;
+                  }
+                  
+                  // Disable submit button
+                  const submitButton = form.querySelector('button[type="submit"]');
+                  const originalText = submitButton.textContent;
+                  submitButton.disabled = true;
+                  submitButton.textContent = 'Submitting...';
+                  
+                  // Track submission
+                  try {
+                      const emailDomain = email.split('@')[1] || 'unknown';
+                      if (typeof cookieManager !== 'undefined') {
+                          cookieManager.trackEvent('notify_signup', {
+                              event_category: 'Launch Notification',
+                              event_label: 'Email Signup',
+                              email_domain: emailDomain
+                          });
+                      }
+                  } catch (err) {
+                      console.warn('Event tracking failed:', err);
+                  }
+                  
+                  const formData = new FormData(form);
+                  
+                  fetch(form.action, {
+                      method: 'POST',
+                      body: formData
+                  })
+                  .then(response => {
+                      submitButton.disabled = false;
+                      submitButton.textContent = originalText;
+                      
+                      if (response.ok) {
+                          showNotifySuccess();
+                      } else {
+                          showNotifyStatus('Something went wrong. Please try again.', 'error');
+                      }
+                  })
+                  .catch(error => {
+                      submitButton.disabled = false;
+                      submitButton.textContent = originalText;
+                      console.error('Form submission error:', error);
+                      showNotifyStatus('Network error. Please check your connection and try again.', 'error');
+                  });
+              }
+          });
+      }
+
+      // Feedback form status and success functions
+      function showFeedbackStatus(message, type) {
+          const statusDiv = document.getElementById('feedbackStatus');
+          if (statusDiv) {
+              statusDiv.innerHTML = `
+                  <div style="
+                      padding: 12px;
+                      border-radius: 8px;
+                      background: ${type === 'error' ? '#ff3b30' : '#34c759'};
+                      color: white;
+                      font-weight: 500;
+                      text-align: center;
+                      margin-top: 16px;
+                  ">
+                      ${message}
+                  </div>
+              `;
+          }
+      }
+
+      function showFeedbackSuccess() {
+          const modal = document.getElementById('feedbackModal');
+          if (modal) {
+              modal.innerHTML = `
+                  <div style="
+                      background: var(--background);
+                      border-radius: 24px;
+                      max-width: 480px;
+                      width: 90%;
+                      margin: 20px;
+                      padding: 48px;
+                      text-align: center;
+                      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+                      border: 1px solid var(--border-color);
+                      color: var(--text-primary);
+                  ">
+                      <div style="
+                          width: 88px;
+                          height: 88px;
+                          background: linear-gradient(135deg, #34c759, var(--como));
+                          border-radius: 22px;
+                          margin: 0 auto 32px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: 40px;
+                          color: white;
+                      ">✓</div>
+                      
+                      <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">Thank You!</h2>
+                      <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+                          Your feedback has been sent successfully. We really appreciate you taking the time to help us improve WARdrop.
+                      </p>
+                      <p style="color: var(--text-tertiary); margin-bottom: 40px; font-size: 14px;">
+                          We typically respond within <strong style="color: var(--como);">24 hours</strong>
+                      </p>
+                      
+                      <button onclick="closeFeedbackModal()" style="
+                          background: var(--como);
+                          color: white;
+                          border: none;
+                          padding: 12px 32px;
+                          border-radius: 980px;
+                          font-weight: 500;
+                          cursor: pointer;
+                          transition: all 0.3s;
+                          font-size: 17px;
+                          letter-spacing: -.022em;
+                      " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+                         onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+                          Close
+                      </button>
+                  </div>
+              `;
+              
+              if (typeof cookieManager !== 'undefined') {
+                  cookieManager.trackEvent('feedback_success_shown', {
+                      event_category: 'Modal',
+                      event_label: 'Feedback Success'
+                  });
+              }
+          }
+      }
+
+      // App Preview Mode Toggle Function - Now also controls website theme
+      function toggleAppPreviewMode() {
+        const button = document.getElementById('appModeToggle');
+        const body = document.body;
+        
+        if (appPreviewMode) {
+          // Switch to light mode preview AND light website theme
+          body.classList.remove('app-dark-preview');
+          body.classList.remove('dark-mode');
+          button.textContent = 'WARdrop. in Dark Mode';
+          appPreviewMode = false;
+          
+          // Update other dark mode toggles
+          localStorage.setItem('darkMode', 'false');
+          document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+          const mobileToggle = document.getElementById('mobileDarkModeToggle');
+          if (mobileToggle) {
+            mobileToggle.innerHTML = '<i class="fas fa-moon" style="margin-right: 12px;"></i><span>Dark Mode</span>';
+          }
+          
+          cookieManager.trackEvent('app_preview_light_mode', {
+            event_category: 'Design Preview',
+            event_label: 'Light Mode App Preview + Website Theme'
+          });
+        } else {
+          // Switch to dark mode preview AND dark website theme
+          body.classList.add('app-dark-preview');
+          body.classList.add('dark-mode');
+          button.textContent = 'WARdrop. in Light Mode';
+          appPreviewMode = true;
+          
+          // Update other dark mode toggles
+          localStorage.setItem('darkMode', 'true');
+          document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+          const mobileToggle = document.getElementById('mobileDarkModeToggle');
+          if (mobileToggle) {
+            mobileToggle.innerHTML = '<i class="fas fa-sun" style="margin-right: 12px;"></i><span>Light Mode</span>';
+          }
+          
+          cookieManager.trackEvent('app_preview_dark_mode', {
+            event_category: 'Design Preview',
+            event_label: 'Dark Mode App Preview + Website Theme'
+          });
+        }
+      }
+
+      // Cookie Functions
+      function acceptAllCookies() {
+        cookieManager.trackEvent('cookie_accept_all');
+        cookieManager.saveConsent({
+          essential: true,
+          analytics: true
+        });
+      }
+
+      function acceptEssentialOnly() {
+        cookieManager.trackEvent('cookie_accept_essential');
+        cookieManager.saveConsent({
+          essential: true,
+          analytics: false
+        });
+      }
+
+      function showCookieSettings() {
+        cookieManager.trackEvent('cookie_settings_opened');
+        document.getElementById('cookieModal').style.display = 'flex';
+        analyticsEnabled = cookieManager.consent.analytics;
+        updateAnalyticsToggle();
+      }
+
+      function closeCookieSettings() {
+        document.getElementById('cookieModal').style.display = 'none';
+      }
+
+      function toggleAnalytics() {
+        analyticsEnabled = !analyticsEnabled;
+        updateAnalyticsToggle();
+        cookieManager.trackEvent('cookie_analytics_toggled', { enabled: analyticsEnabled });
+      }
+
+      function updateAnalyticsToggle() {
+        const toggle = document.getElementById('analyticsToggle');
+        const slider = document.getElementById('analyticsSlider');
+        
+        if (analyticsEnabled) {
+          toggle.style.background = 'var(--como)';
+          slider.style.left = '22px';
+        } else {
+          toggle.style.background = 'var(--border-color)';
+          slider.style.left = '2px';
+        }
+      }
+
+      function saveCustomSettings() {
+        cookieManager.trackEvent('cookie_custom_saved', { analytics: analyticsEnabled });
+        cookieManager.saveConsent({
+          essential: true,
+          analytics: analyticsEnabled
+        });
+        closeCookieSettings();
+      }
+
+      // Navigation Functions
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('active');
+        cookieManager.trackEvent('mobile_menu_toggled', { 
+          action: menu.classList.contains('active') ? 'opened' : 'closed' 
+        });
+      }
+
+      function closeMobileMenu() {
+        document.getElementById('mobileMenu').classList.remove('active');
+      }
+
+      // Dark Mode - Now syncs with app preview mode
+      function toggleDarkMode() {
+        const body = document.body;
+        const isDark = body.classList.contains('dark-mode');
+        const appModeButton = document.getElementById('appModeToggle');
+        
+        if (isDark) {
+          body.classList.remove('dark-mode');
+          body.classList.remove('app-dark-preview');
+          localStorage.setItem('darkMode', 'false');
+          document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+          const mobileToggle = document.getElementById('mobileDarkModeToggle');
+          if (mobileToggle) {
+            mobileToggle.innerHTML = '<i class="fas fa-moon" style="margin-right: 12px;"></i><span>Dark Mode</span>';
+          }
+          // Update app preview button
+          if (appModeButton) {
+            appModeButton.textContent = 'WARdrop. in Dark Mode';
+            appPreviewMode = false;
+          }
+          cookieManager.trackEvent('dark_mode_disabled');
+        } else {
+          body.classList.add('dark-mode');
+          body.classList.add('app-dark-preview');
+          localStorage.setItem('darkMode', 'true');
+          document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+          const mobileToggle = document.getElementById('mobileDarkModeToggle');
+          if (mobileToggle) {
+            mobileToggle.innerHTML = '<i class="fas fa-sun" style="margin-right: 12px;"></i><span>Light Mode</span>';
+          }
+          // Update app preview button
+          if (appModeButton) {
+            appModeButton.textContent = 'WARdrop. in Light Mode';
+            appPreviewMode = true;
+          }
+          cookieManager.trackEvent('dark_mode_enabled');
+        }
+      }
+
+      // Demo Modal Functions
+      function openDemoModal() {
+        document.getElementById('demoModal').classList.add('show');
+        cookieManager.trackEvent('demo_modal_opened', {
+          event_category: 'Modal',
+          event_label: 'WARdrop Demo Modal'
+        });
+      }
+
+      function closeDemoModal() {
+        document.getElementById('confirmExitModal').classList.add('show');
+      }
+
+      function closeConfirmModal() {
+        document.getElementById('confirmExitModal').classList.remove('show');
+      }
+
+      function confirmExit() {
+        document.getElementById('confirmExitModal').classList.remove('show');
+        document.getElementById('demoModal').classList.remove('show');
+        // You can also add additional logic here, e.g., navigate away
+      }
+
+      // Contact Functions
+      function openEmailApp() {
+        trackContactClick('email');
+        const emailAddress = 'info@wardrobeapp.com';
+        const subject = 'Hello from WARdrop. Website';
+        const body = 'Hi there,\n\nI found your app through the website and wanted to get in touch.\n\n';
+        
+        const emailUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        try {
+          window.location.href = emailUrl;
+        } catch (error) {
+          console.error('Error opening email app:', error);
+          showEmailFallback();
+        }
+      }
+
+      function openInstagramApp() {
+        trackContactClick('instagram');
+        const instagramUsername = 'wardrop_app';
+        
+        const instagramAppUrl = `instagram://user?username=${instagramUsername}`;
+        const instagramWebUrl = `https://instagram.com/${instagramUsername}`;
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = instagramAppUrl;
+          document.body.appendChild(iframe);
+          
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+            window.open(instagramWebUrl, '_blank');
+          }, 1000);
+        } else {
+          window.open(instagramWebUrl, '_blank');
+        }
+      }
+
+      function showEmailFallback() {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.6);
+          z-index: 10002;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(10px);
+        `;
+
+        modal.innerHTML = `
+          <div style="
+            background: var(--background);
+            border-radius: 24px;
+            max-width: 420px;
+            margin: 20px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+          ">
+            <div style="
+              width: 88px;
+              height: 88px;
+              background: linear-gradient(135deg, var(--spanish-green), var(--como));
+              border-radius: 22px;
+              margin: 0 auto 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 40px;
+              color: white;
+            ">📧</div>
+            <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">Contact Us</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+              Send us an email at:
+            </p>
+            <p style="color: var(--como); margin-bottom: 40px; font-size: 19px; font-weight: 600; user-select: all;">
+              info@wardrobeapp.com
+            </p>
+            <button onclick="closeEmailFallback()" style="
+              background: var(--como);
+              color: white;
+              border: none;
+              padding: 12px 32px;
+              border-radius: 980px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.3s;
+              font-size: 17px;
+              letter-spacing: -.022em;
+            " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+               onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+              Got it
+            </button>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeEmailFallback();
+          }
+        });
+      }
+
+      function closeEmailFallback() {
+        const modal = document.querySelector('div[style*="z-index: 10002"]');
+        if (modal) {
+          modal.style.opacity = '0';
+          modal.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            if (modal.parentNode) {
+              modal.parentNode.removeChild(modal);
+            }
+          }, 300);
+        }
+      }
+
+      // Feedback Modal Functions
+      function openFeedbackModal() {
+        document.getElementById('feedbackModal').style.display = 'flex';
+        cookieManager.trackEvent('feedback_modal_opened', {
+          event_category: 'Modal',
+          event_label: 'Feedback Modal'
+        });
+      }
+
+      function closeFeedbackModal() {
+        document.getElementById('feedbackModal').style.display = 'none';
+      }
+
+      // Analytics Tracking Functions
+      function trackNavClick(section) {
+        cookieManager.trackEvent('navigation_click', {
+          event_category: 'Navigation',
+          event_label: section,
+          section: section
+        });
+      }
+
+      function trackCTAClick(buttonId, buttonText) {
+        cookieManager.trackEvent('cta_click', {
+          event_category: 'CTA',
+          event_label: buttonText,
+          button_id: buttonId,
+          button_text: buttonText
+        });
+      }
+
+      function trackFeatureClick(featureName) {
+        cookieManager.trackEvent('feature_click', {
+          event_category: 'Features',
+          event_label: featureName,
+          feature_name: featureName
+        });
+      }
+
+      function trackWorkflowClick(stepName) {
+        cookieManager.trackEvent('workflow_click', {
+          event_category: 'How It Works',
+          event_label: stepName,
+          step_name: stepName
+        });
+      }
+
+      function trackPrivacyClick(privacyFeature) {
+        cookieManager.trackEvent('privacy_feature_click', {
+          event_category: 'Privacy & Security',
+          event_label: privacyFeature,
+          privacy_feature: privacyFeature
+        });
+      }
+
+      function trackContactClick(contactType) {
+        cookieManager.trackEvent('contact_click', {
+          event_category: 'Contact',
+          event_label: contactType,
+          contact_type: contactType
+        });
+      }
+
+      function trackFooterClick(linkName) {
+        cookieManager.trackEvent('footer_click', {
+          event_category: 'Footer',
+          event_label: linkName,
+          link_name: linkName
+        });
+      }
+
+      function trackSocialClick(platform) {
+        cookieManager.trackEvent('social_click', {
+          event_category: 'Social',
+          event_label: platform,
+          platform: platform
+        });
+      }
+
+      // Notify on Launch Modal Function
+      function showNotifyModal() {
+        const modal = document.createElement('div');
+        modal.id = 'notifyModal';
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.6);
+          z-index: 10002;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(10px);
+        `;
+
+        modal.innerHTML = `
+          <div style="
+            background: var(--background);
+            border-radius: 24px;
+            max-width: 480px;
+            width: 90%;
+            margin: 20px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+          ">
+            <div style="
+              width: 88px;
+              height: 88px;
+              background: linear-gradient(135deg, var(--spanish-green), var(--como));
+              border-radius: 22px;
+              margin: 0 auto 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 40px;
+              color: white;
+            ">🔔</div>
+            
+            <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">Get Notified</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+              Be the first to know when WARdrop. launches. We'll send you a single notification email when the app is available.
+            </p>
+            
+            <form id="notifyForm" action="https://formsubmit.co/5a6b624eb27a723c8f6de854bd0415f4" method="POST" style="text-align: left;">
+              <input type="hidden" name="_subject" value="New Launch Notification Signup - WARdrop.">
+              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_template" value="box">
+              <input type="hidden" name="_next" value="https://seanogodiunor.github.io/WARdrop./">
+              
+              <div style="margin-bottom: 20px;">
+                <label for="notifyName" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Name</label>
+                <input type="text" id="notifyName" name="name" required
+                  style="width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); transition: border-color 0.3s ease;"
+                  placeholder="Your name"
+                  onfocus="this.style.borderColor='var(--como)'"
+                  onblur="this.style.borderColor='var(--border-color)'">
+              </div>
+
+              <div style="margin-bottom: 24px;">
+                <label for="notifyEmail" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 16px; color: var(--text-primary);">Email Address</label>
+                <input type="email" id="notifyEmail" name="email" required
+                  style="width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--background-secondary); color: var(--text-primary); transition: border-color 0.3s ease;"
+                  placeholder="your@email.com"
+                  onfocus="this.style.borderColor='var(--como)'"
+                  onblur="this.style.borderColor='var(--border-color)'">
+              </div>
+
+              <div style="margin-bottom: 32px; text-align: left;">
+                <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; line-height: 1.4;">
+                  <input type="checkbox" id="notifyConsent" name="consent" required value="yes"
+                    style="margin-top: 2px; transform: scale(1.2); accent-color: var(--como);">
+                  <span style="font-size: 14px; color: var(--text-secondary);">
+                    I agree to receive a one-time email notification when WARdrop. launches. You can unsubscribe at any time, and we will never share your email with third parties.
+                  </span>
+                </label>
+              </div>
+
+              <div style="display: flex; gap: 12px; justify-content: center;">
+                <button type="button" onclick="closeNotifyModal()" style="
+                  padding: 12px 24px;
+                  background: var(--background-secondary);
+                  color: var(--text-primary);
+                  border: 1px solid var(--border-color);
+                  border-radius: 980px;
+                  cursor: pointer;
+                  font-size: 16px;
+                  font-weight: 500;
+                  transition: all 0.3s ease;
+                  letter-spacing: -.022em;
+                " onmouseover="this.style.background='var(--border-color)'" 
+                   onmouseout="this.style.background='var(--background-secondary)'">
+                  Cancel
+                </button>
+                
+                <button type="submit" style="
+                  padding: 12px 24px;
+                  background: var(--como);
+                  color: white;
+                  border: none;
+                  border-radius: 980px;
+                  font-weight: 500;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  font-size: 16px;
+                  letter-spacing: -.022em;
+                " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+                   onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+                  Notify Me
+                </button>
+              </div>
+            </form>
+            
+            <div id="notifyStatus" style="margin-top: 20px; font-size: 14px;"></div>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeNotifyModal();
+          }
+        });
+        
+        cookieManager.trackEvent('notify_modal_opened', {
+          event_category: 'Modal',
+          event_label: 'Launch Notification Modal'
+        });
+      }
+
+      function closeNotifyModal() {
+        const modal = document.getElementById('notifyModal');
+        if (modal) {
+          modal.style.opacity = '0';
+          modal.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            if (modal.parentNode) {
+              modal.parentNode.removeChild(modal);
+            }
+          }, 300);
+        }
+      }
+
+      function showNotifyStatus(message, type) {
+        const statusDiv = document.getElementById('notifyStatus');
+        if (statusDiv) {
+          statusDiv.innerHTML = `
+            <div style="
+              padding: 12px;
+              border-radius: 8px;
+              background: ${type === 'error' ? '#ff3b30' : '#34c759'};
+              color: white;
+              font-weight: 500;
+              text-align: center;
+            ">
+              ${message}
+            </div>
+          `;
+        }
+      }
+
+      function showNotifySuccess() {
+        const modal = document.getElementById('notifyModal');
+        if (modal) {
+          modal.innerHTML = `
+            <div style="
+              background: var(--background);
+              border-radius: 24px;
+              max-width: 480px;
+              width: 90%;
+              margin: 20px;
+              padding: 48px;
+              text-align: center;
+              box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+              border: 1px solid var(--border-color);
+              color: var(--text-primary);
+            ">
+              <div style="
+                width: 88px;
+                height: 88px;
+                background: linear-gradient(135deg, #34c759, var(--como));
+                border-radius: 22px;
+                margin: 0 auto 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 40px;
+                color: white;
+              ">✓</div>
+              
+              <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">You're In!</h2>
+              <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+                Thank you for signing up! We'll send you a notification email as soon as WARdrop. is available on the App Store.
+              </p>
+              <p style="color: var(--text-tertiary); margin-bottom: 40px; font-size: 14px;">
+                Expected launch: <strong style="color: var(--como);">Q3 2025</strong>
+              </p>
+              
+              <button onclick="closeNotifyModal()" style="
+                background: var(--como);
+                color: white;
+                border: none;
+                padding: 12px 32px;
+                border-radius: 980px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s;
+                font-size: 17px;
+                letter-spacing: -.022em;
+              " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+                 onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+                Got it
+              </button>
+            </div>
+          `;
+          
+          cookieManager.trackEvent('notify_signup_success', {
+            event_category: 'Launch Notification',
+            event_label: 'Signup Completed'
+          });
+        }
+      }
+
+      // Coming Soon Modal
+      function showComingSoonModal() {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.6);
+          z-index: 10002;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(10px);
+        `;
+
+        modal.innerHTML = `
+          <div style="
+            background: var(--background);
+            border-radius: 24px;
+            max-width: 420px;
+            margin: 20px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+          ">
+            <div style="
+              width: 88px;
+              height: 88px;
+              background: linear-gradient(135deg, var(--spanish-green), var(--como));
+              border-radius: 22px;
+              margin: 0 auto 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 40px;
+              color: white;
+            ">📱</div>
+            <h2 style="color: var(--text-primary); margin-bottom: 16px; font-size: 28px; font-weight: 600; letter-spacing: -.005em;">Coming Soon</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; font-size: 17px;">
+              WARdrop. is in active development. We're crafting the perfect digital wardrobe experience for you.
+            </p>
+            <p style="color: var(--text-tertiary); margin-bottom: 40px; font-size: 14px; font-weight: 500;">
+              Expected launch: <strong style="color: var(--como);">Q3 2025</strong>
+            </p>
+            <button onclick="closeComingSoonModal()" style="
+              background: var(--como);
+              color: white;
+              border: none;
+              padding: 12px 32px;
+              border-radius: 980px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.3s;
+              font-size: 17px;
+              letter-spacing: -.022em;
+            " onmouseover="this.style.background='var(--stromboli)'; this.style.transform='scale(1.02)'" 
+               onmouseout="this.style.background='var(--como)'; this.style.transform='scale(1)'">
+              Got it
+            </button>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeComingSoonModal();
+          }
+        });
+        
+        cookieManager.trackEvent('coming_soon_modal_shown', {
+          event_category: 'Modal',
+          event_label: 'Coming Soon Modal'
+        });
+      }
+
+      function closeComingSoonModal() {
+        const modal = document.querySelector('div[style*="z-index: 10002"]');
+        if (modal) {
+          modal.style.opacity = '0';
+          modal.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            if (modal.parentNode) {
+              modal.parentNode.removeChild(modal);
+            }
+          }, 300);
+        }
+      }
+
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            const headerHeight = 48;
+            const targetPosition = target.offsetTop - headerHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+            
+            closeMobileMenu();
+          }
+        });
+      });
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+          document.body.classList.add('app-dark-preview');
+          document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+          const mobileToggle = document.getElementById('mobileDarkModeToggle');
+          if (mobileToggle) {
+            mobileToggle.innerHTML = '<i class="fas fa-sun" style="margin-right: 12px;"></i><span>Light Mode</span>';
+          }
+          // Update app preview button
+          const appModeButton = document.getElementById('appModeToggle');
+          if (appModeButton) {
+            appModeButton.textContent = 'WARdrop. in Light Mode';
+            appPreviewMode = true;
+          }
+        }
+        
+        // Track page load
+        cookieManager.trackEvent('page_loaded', {
+          event_category: 'Page',
+          event_label: 'Landing Page',
+          page_title: document.title,
+          user_agent: navigator.userAgent
+        });
+        
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+              
+              const sectionId = entry.target.id || entry.target.className;
+              cookieManager.trackEvent('section_viewed', {
+                event_category: 'Scroll',
+                event_label: sectionId,
+                section: sectionId
+              });
+            }
+          });
+        }, observerOptions);
+
+        // Observe sections for animations
+        document.querySelectorAll('.section, .hero, .design-section').forEach(section => {
+          section.style.opacity = '0';
+          section.style.transform = 'translateY(30px)';
+          section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+          observer.observe(section);
+        });
+        
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+          const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+          if (scrollPercent > maxScroll && scrollPercent % 25 === 0 && scrollPercent <= 100) {
+            maxScroll = scrollPercent;
+            cookieManager.trackEvent('scroll_depth', {
+              event_category: 'Engagement',
+              event_label: `${scrollPercent}%`,
+              scroll_depth: scrollPercent
+            });
+          }
+        });
+        
+        console.log('🚀 WARdrop. - Apple-inspired design loaded successfully!');
+      });
+
+      // Initialize form handling once
+      handleFormSubmission();
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+          closeMobileMenu();
+        }
+      });
+    </script>
+  </body>
+</html>

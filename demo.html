@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fashion App Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f9f9f9;
+      --bg-dark: #000000;
+      --text-light: #000000;
+      --text-dark: #ffffff;
+      --card-light: #ffffff;
+      --card-dark: #1a1a1a;
+      --gray-light: #f5f5f5;
+      --gray-medium: #e0e0e0;
+      --gray-dark: #8e8e93;
+      --green: #4a7c59;
+      --blue: #007aff;
+      --orange: #ff9500;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+
+    .demo-button {
+      position: fixed;
+      bottom: calc(25% - 70px); /* 70px lower than demo button */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #4d776a;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      letter-spacing: -0.022em;
+      border: 1px solid #4d776a;
+      border-radius: 980px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .demo-button:hover {
+      background: #4d776a;
+      color: white;
+    }
+
+
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* iPhone */
+    .phone-container {
+      position: relative;
+      width: 375px;
+      height: 812px;
+      background: #000;
+      border-radius: 40px;
+      padding: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--card-light);
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      font-family: sans-serif;
+      background: #f8f8f8; /* or dark background */
+    }
+
+    .dynamic-island {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 32px;
+      background: black;
+      border-radius: 20px;
+      z-index: 1;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+    }
+
+    .status-icons img {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+
+    .time {
+      font-weight: 600;
+      font-size: 17px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 37px;
+      background: #000;
+      border-radius: 20px;
+    }
+
+    .main-content {
+      height: calc(100% - 44px - 83px);
+      overflow-y: auto;
+      background: var(--card-light);
+      position: relative;
+    }
+
+    .tab-bar {
+      height: 83px;
+      background: var(--card-light);
+      border-top: 0.5px solid var(--gray-medium);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding-bottom: 20px;
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .tab-item.active {
+      opacity: 1;
+      color: var(--text-light);
+    }
+
+    .tab-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      filter: grayscale(100%);
+      transition: filter 0.2s;
+    }
+
+    .tab-item.active .tab-icon {
+      filter: grayscale(0%);
+    }
+
+    .tab-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--gray-dark);
+    }
+
+    .tab-item.active .tab-label {
+      color: var(--text-light);
+    }
+
+    /* HOME TAB */
+    .home-content {
+      padding: 16px;
+    }
+
+    .greeting {
+      margin-bottom: 20px;
+    }
+
+    .greeting-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    .main-title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .main-title {
+      font-size: 28px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .profile-icon-main img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .home-top-cards {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .home-card {
+      background: var(--gray-light);
+      border-radius: 16px;
+      padding: 16px;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+
+    .weather-card-home {
+      cursor: pointer;
+    }
+
+    .weather-card-home .weather-location {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .weather-card-home .weather-condition {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-bottom: 8px;
+    }
+
+    .weather-card-home .weather-temp {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .outfit-suggestion-card {
+      border: none;
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: normal;
+    }
+
+    .accessory-piece {
+      position: absolute;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .accessory-piece:hover {
+      transform: scale(1.05);
+    }
+
+    .dashboard-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .clothing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .clothing-item {
+      background: var(--gray-light);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .clothing-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 0 12px 0; /* remove auto centering */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.clothing-icon img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.clothing-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: left; /* ensure text aligns left */
+}
+
+.clothing-count {
+  font-size: 14px;
+  color: var(--gray-dark);
+  text-align: left;
+}
+
+
+    .quick-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    .action-card {
+      flex-shrink: 0;                /* Prevent shrinking */
+      min-width: 160px;              /* Adjust as needed */
+      max-width: 220px;              /* Optional cap */
+      display: flex;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: default;
+      transition: background 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      scroll-snap-align: start;     /* Snap alignment */
+    }
+
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .action-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .action-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .action-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .action-count {
+      font-size: 13px;
+      color: #777;
+    }
+    
+
+    .get-dressed {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .dress-up-cards {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .dress-up-cards::-webkit-scrollbar {
+      display: none;
+    }
+
+    .dress-card {
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+      min-width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+      scroll-snap-align: start;
+    }
+
+    .dress-card:hover {
+      transform: scale(1.02);
+    }
+
+    .weather-card-main {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      color: white;
+    }
+
+    .dress-up-card {
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: white;
+      position: relative;
+    }
+
+    .creative-card {
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      color: white;
+      position: relative;
+    }
+
+    .dress-card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      align-self: flex-start;
+    }
+
+    .dress-card-content {
+      margin-top: auto;
+    }
+
+    .dress-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .dress-card-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+      line-height: 1.3;
+    }
+
+    .dress-card-graphics {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .graphic-shape {
+      position: absolute;
+      border-radius: 8px;
+    }
+
+    .shape-1 {
+      top: 20px;
+      right: 20px;
+      width: 20px;
+      height: 40px;
+      background: #10b981;
+      transform: rotate(15deg);
+    }
+
+    .shape-2 {
+      top: 40px;
+      right: 45px;
+      width: 25px;
+      height: 25px;
+      background: #f59e0b;
+      border-radius: 50%;
+    }
+
+    .shape-3 {
+      top: 70px;
+      right: 15px;
+      width: 15px;
+      height: 25px;
+      background: #3b82f6;
+      transform: rotate(-20deg);
+    }
+
+    .shape-4 {
+      top: 30px;
+      right: 70px;
+      width: 8px;
+      height: 20px;
+      background: #8b5cf6;
+      transform: rotate(45deg);
+    }
+
+    .creative-graphics {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .creative-brush {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      transform: rotate(25deg);
+    }
+
+    .creative-sparkle {
+      position: absolute;
+      top: 50px;
+      right: 45px;
+      font-size: 16px;
+      animation: sparkle 2s infinite ease-in-out;
+    }
+
+    .creative-magic {
+      position: absolute;
+      top: 30px;
+      right: 70px;
+      font-size: 14px;
+      animation: float 3s infinite ease-in-out;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* FAVORITES TAB */
+    .favorites-content {
+      padding: 16px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .page-title-container {
+      flex: 1;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      background: var(--gray-light);
+      border: none;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      font-size: 18px;
+      opacity: 0.6;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      background: var(--gray-light);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      padding: 6px 10px;
+    }
+
+    
+
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .search-input::placeholder {
+      color: var(--gray-dark);
+    }
+
+    .search-icon-left {
+      font-size: 16px;
+      color: var(--gray-dark);
+      margin-right: 8px;
+    }
+
+    .date-filter {
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 980px;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+    }
+
+    .date-emoji {
+      vertical-align: middle;
+    }
+
+    .outfit-card {
+      background: var(--gray-light);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .outfit-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .outfit-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .outfit-date {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-top: 4px;
+    }
+
+    .expand-icon {
+      font-size: 16px;
+      transition: transform 0.3s;
+    }
+
+    .outfit-card.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .outfit-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .outfit-card.expanded .outfit-details {
+      max-height: 400px;
+    }
+
+    .outfit-items {
+      display: flex;
+      gap: 12px;
+      padding: 0 16px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .outfit-item {
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .outfit-item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 8px;
+    }
+
+    .outfit-item-name {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .outfit-item-brand {
+      font-size: 10px;
+      color: var(--gray-dark);
+    }
+
+    .share-button {
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 24px;
+      margin: 16px auto;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: fit-content;
+    }
+
+    .add-button-fixed {
+      position: absolute;
+      bottom: 140px;
+      right: 40px;
+      width: 56px;
+      height: 56px;
+      background: var(--green);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: default;
+      box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      display: none;
+      opacity: 0.8;
+    }
+
+    /* COLLECTIONS TAB */
+    .collections-content {
+      padding: 16px;
+    }
+
+    .category-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .category-filter {
+      background: var(--gray-light);
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      white-space: nowrap;
+      color: rgb(0, 0, 0);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .category-filter.active {
+      background: #e0e0e0;
+      color: rgb(0, 0, 0);
+    }
+
+    .collection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .collection-item {
+      background: var(--gray-light);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+    }
+
+    .collection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collection-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .collection-expanded {
+      margin-top: 16px;
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .collection-item.expanded .collection-expanded {
+      display: grid;
+    }
+
+    .collection-item.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .collection-product {
+      text-align: center;
+    }
+
+    .collection-product-image {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 8px;
+    }
+
+    .collection-product-name {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .collection-product-brand {
+      font-size: 10px;
+      color: var(--gray-dark);
+    }
+
+    /* MODAL SHEETS */
+    .modal-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      z-index: 2000;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+
+    .modal-sheet.show {
+      transform: translateY(0);
+    }
+
+    #share-modal, #weather-modal, #calendar-modal {
+      max-height: 100%;
+      height: 100%;
+      border-radius: 20px 20px 0 0;
+    }
+
+    #share-modal.show, #weather-modal.show, #calendar-modal.show {
+      transform: translateY(0);
+    }
+
+    /* Weather Modal Styles */
+    .weather-modal-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--card-light);
+      border-radius: 20px 20px 0 0;
+      overflow-y: auto;
+      color: var(--text-light);
+      padding-top: 20px;
+    }
+
+    .weather-modal-header-new {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px 20px 20px;
+      background: transparent;
+    }
+
+    .weather-modal-title-left {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .weather-close-btn {
+      background: none;
+      border: none;
+      color: #4d776a;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+
+    .weather-search-container {
+      padding: 0 20px 20px 20px;
+    }
+
+    .weather-search-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: var(--gray-light);
+      border-radius: 12px;
+      padding: 12px 16px;
+      gap: 10px;
+    }
+
+    .search-icon {
+      font-size: 18px;
+      color: var(--gray-dark);
+    }
+
+    .weather-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: var(--text-light);
+    }
+    .weather-search-input::placeholder {
+      color: var(--gray-dark);
+    }
+
+    .weather-main-display-new {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .weather-temp-large-new {
+      font-size: 72px;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .weather-condition-large-new {
+      font-size: 18px;
+      opacity: 0.8;
+      color: var(--gray-dark);
+    }
+
+    .forecast-section-new {
+      padding: 20px;
+      background: transparent;
+      margin: 20px;
+      border-radius: 16px;
+    }
+
+    .forecast-header-new {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+    }
+
+    .forecast-scroll-new {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .forecast-scroll-new::-webkit-scrollbar {
+      display: none;
+    }
+
+    .forecast-item {
+      text-align: center;
+      background: var(--card-light);
+      border-radius: 12px;
+      padding: 16px 12px;
+      min-width: 80px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      color: var(--text-light);
+      scroll-snap-align: start;
+    }
+
+    .forecast-day-name {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+      color: var(--gray-dark);
+    }
+
+    .forecast-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .forecast-high {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .forecast-low {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 4px;
+      color: var(--gray-dark);
+    }
+
+    .forecast-rain {
+      font-size: 10px;
+      opacity: 0.8;
+      color: var(--gray-dark);
+    }
+
+    .search-history-section {
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .search-history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .search-history-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .history-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .title-text {
+      color: #4d776a;
+      font-weight: 600;
+    }
+
+    .date-text {
+      color: #8e8e93;
+    }
+
+    .clear-history-btn {
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .search-history-list {
+      margin-bottom: 20px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--gray-light);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      color: var(--text-light);
+    }
+
+    .history-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .history-location {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .weather-bottom-search-btn {
+      background: #4d776a;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      width: calc(100% - 40px);
+      margin: 0 20px 20px 20px;
+      cursor: pointer;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .detail-item {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* No Results Styles */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-dark);
+    }
+
+    .no-results-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .no-results-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .no-results-subtitle {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--gray-medium);
+      border-radius: 2px;
+      margin: 8px auto 16px auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px 16px 20px;
+      border-bottom: 0.5px solid var(--gray-medium);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: #4d776a;
+      cursor: pointer;
+    }
+
+    .modal-content {
+      padding: 20px;
+    }
+
+    /* Calendar Modal Styles */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .calendar-nav {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .calendar-month {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      margin-bottom: 20px;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-dark);
+      padding: 8px 4px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .calendar-day.selected {
+  background: var(--green);
+  color: white;
+  border-radius: 50%;     /* makes it circular */
+  aspect-ratio: 1 / 1;    /* ensures it's a square even if width is dynamic */
+  width: 40px;            /* set a specific size if needed */
+  height: 40px;
+  display: flex;          /* center content */
+  align-items: center;
+  justify-content: center;
+}
+
+    .calendar-day.has-event::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .found-favs {
+      margin-bottom: 20px;
+    }
+
+    
+
+    .favs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--gray-light);
+      border-radius: 12px;
+    }
+
+    .fav-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--gray-medium);
+      border-radius: 6px;
+    }
+
+    .show-all-button {
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 980px;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      width: auto;
+      cursor: pointer;
+      display: block;       /* ensure it's treated as a block for margin auto to work */
+      margin: 0 auto;       /* centers horizontally */
+    }
+
+    /* Share Modal Styles */
+    .share-modal-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #F0F0F0;
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+    }
+
+    .share-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .share-cancel {
+      background: none;
+      border: none;
+      color: #4d776a;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+
+    .share-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000000;
+      text-align: center;
+    }
+
+    .share-settings {
+      background: #000000;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .outfit-canvas {
+      position: relative;
+      height: calc(100% - 160px);
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .outfit-piece {
+      position: absolute;
+      cursor: grab;
+    }
+
+    .outfit-piece.dragging {
+      cursor: grabbing;
+      z-index: 1001;
+    }
+
+    .outfit-piece img {
+      max-width: 100%;
+      height: auto;
+      pointer-events: none;
+    }
+
+    .share-shirt-piece {
+      top: 60px;
+      left: 40px;
+      width: 140px;
+      transform: rotate(-5deg);
+    }
+
+    .share-jeans-piece {
+      top: 200px;
+      left: 60px;
+      width: 120px;
+      transform: rotate(-3deg);
+    }
+
+    .share-shoes-piece {
+      bottom: 120px;
+      left: 30px;
+      width: 140px;
+      transform: rotate(-8deg);
+    }
+
+    .share-accessory-piece {
+      top: 120px;
+      right: 80px;
+      width: 100px;
+      transform: rotate(15deg);
+    }
+
+    .share-profile-piece {
+      top: 300px;
+      right: 100px;
+      width: 20px;
+      height: 200px;
+    }
+
+    .profile-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: none;
+    }
+
+    .share-button-new {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      right: 30px;
+      background: #4a7c59;
+      backdrop-filter: blur(10px);
+      color: #e9e9e9;
+      border: none;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    /* Demo Introduction Overlay */
+    .demo-intro {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1); /* light translucent layer */
+  color: #1c1c1e; /* iOS dark text on glass */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  z-index: 3000;
+  border-radius: 32px;
+
+  backdrop-filter: blur(20px); /* ✨ iOS glass effect */
+  -webkit-backdrop-filter: blur(20px); /* Safari support */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.demo-intro.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+    .intro-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .intro-text {
+      font-size: 16px;
+      line-height: 1.5;
+      opacity: 0.8;
+      margin-bottom: 24px;
+    }
+
+    .intro-tips {
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .intro-tips li {
+      margin-bottom: 8px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+
+    .start-demo-btn  {
+      color: #4d776a; 
+      padding: 12px 24px;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      letter-spacing: -.022em;
+      border: 1px solid #4d776a; 
+      border-radius: 980px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .start-demo-btn :hover {
+      background: #4d776a; 
+      color: white;
+    }
+
+    .app-icon {
+      position: fixed;
+      top: calc(50% - 90px);   /* moved a bit higher to accommodate larger size */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;             /* bigger size */
+      height: 100px;
+      object-fit: contain;
+      border-radius: 20px;      /* rounded edges */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* subtle shadow */
+      background: white;        /* optional: if your icon has transparency, add a white bg */
+    }
+
+
+   .slogen-text {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #4d776a;
+      font-size: 12px;               /* smaller text */
+      font-weight: 500;
+      text-align: center;
+      letter-spacing: 1px;           /* more spacing for all-caps */
+      font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      text-transform: uppercase;     /* all caps */
+      white-space: nowrap; /* keeps text on one line */
+    }
+
+
+
+  </style>
+</head>
+<body>
+
+  <img src="./logos/app.png" alt="App Icon" class="app-icon" />
+  <button class="demo-button" onclick="openDemo()">Start Demo</button>
+  <div class="slogen-text">
+    Your Gateway to Conviniency
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="phone-container">
+      <div class="phone-screen">
+        <div class="status-bar">
+          <div class="time">12:05</div>
+          <div class="dynamic-island"></div>
+          <div class="status-icons">
+            <span class="signal">
+              <img src="icon/signal.png" alt="Signal Icon" />
+            </span>
+            <span class="wifi">
+              <img src="icon/wifi.png" alt="Wi-Fi Icon" />
+            </span>
+            <span class="battery">
+              <img src="icon/battery.png" alt="Battery Icon" />
+              <span>94%</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="main-content" id="main-content">
+          <!-- Content will be dynamically loaded -->
+        </div>
+
+        <div class="tab-bar">
+    
+
+          <div class="tab-item active" onclick="switchTab('home', this)">
+            <div class="tab-icon">
+              <img src="./icon/home.png" alt="Home Icon" style="width: 20px; height: 20px;">
+            </div>
+            <div class="tab-label">Home</div>
+          </div>
+
+
+          <div class="tab-item" onclick="switchTab('favorites', this)">
+            <div class="tab-icon">
+              <img src="./icon/star.png" alt="Star Icon" style="width: 20px; height: 20px;">
+            </div>
+            <div class="tab-label">Favorites</div>
+          </div>
+
+
+          <div class="tab-item" onclick="switchTab('collections', this)">
+            <div class="tab-icon">
+              <img src="./icon/closet.png" alt="Collections Icon" style="width: 20px; height: 20px;">
+            </div>
+            <div class="tab-label">Collections</div>
+          </div>
+          
+        </div>
+
+        <!-- Weather Modal -->
+        <div class="modal-sheet" id="weather-modal">
+          <div class="weather-modal-content">
+            <div class="weather-modal-header-new">
+              <div class="weather-modal-title-left">FORCAST</div>
+              <button class="weather-close-btn" onclick="closeModal('weather-modal')">Close</button>
+            </div>
+            
+            <div class="weather-search-container">
+                <div class="weather-search-input-wrapper">
+                    <span class="search-icon">📍</span>
+                    <input type="text" class="weather-search-input" placeholder="Bonn">
+                </div>
+            </div>
+
+            <div class="weather-main-display-new">
+              <div class="weather-temp-large-new">27°C</div>
+              <div class="weather-condition-large-new">Clear sky</div>
+            </div>
+            
+            <div class="forecast-section-new">
+              <div class="forecast-header-new">📅 7-Day Forecast</div>
+              <div class="forecast-scroll-new">
+                <div class="forecast-item">
+                  <div class="forecast-day-name">Fri</div>
+                  <div class="forecast-icon">☁️</div>
+                  <div class="forecast-high">26°</div>
+                  <div class="forecast-low">18°</div>
+                  <div class="forecast-rain">💧 0%</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day-name">Sat</div>
+                  <div class="forecast-icon">⛅</div>
+                  <div class="forecast-high">28°</div>
+                  <div class="forecast-low">20°</div>
+                  <div class="forecast-rain">💧 8%</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day-name">Sun</div>
+                  <div class="forecast-icon">🌧️</div>
+                  <div class="forecast-high">22°</div>
+                  <div class="forecast-low">16°</div>
+                  <div class="forecast-rain">💧 85%</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day-name">Mon</div>
+                  <div class="forecast-icon">⛈️</div>
+                  <div class="forecast-high">19°</div>
+                  <div class="forecast-low">14°</div>
+                  <div class="forecast-rain">💧 95%</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day-name">Tue</div>
+                  <div class="forecast-icon">🌤️</div>
+                  <div class="forecast-high">24°</div>
+                  <div class="forecast-low">17°</div>
+                  <div class="forecast-rain">💧 20%</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="search-history-section">
+                <div class="search-history-header">
+                    <div class="search-history-title">Searched History</div>
+                    <button class="clear-history-btn">🗑️ Clear History</button>
+                </div>
+                <div class="search-history-list">
+                    <div class="history-item">
+                        <span class="history-icon">☀️</span>
+                        <span class="history-location">Cologne</span>
+                    </div>
+                     <div class="history-item">
+                        <span class="history-icon">☁️</span>
+                        <span class="history-location">Berlin</span>
+                    </div>
+                     <div class="history-item">
+                        <span class="history-icon">❄️</span>
+                        <span class="history-location">Munich</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="weather-bottom-search-btn">Search</button>
+          </div>
+        </div>
+
+        <!-- Calendar Modal -->
+        <div class="modal-sheet" id="calendar-modal">
+          <div class="modal-handle"></div>
+          <div class="modal-header">
+            <div class="modal-title">SEARCH FAVS</div>
+            <button class="close-button" onclick="closeModal('calendar-modal')">Close</button>
+          </div>
+          <div class="modal-content">
+            <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+              <button class="category-filter active">Date created</button>
+              <button class="category-filter">Favs Name</button>
+            </div>
+            <div class="calendar-header">
+              <button class="calendar-nav">‹</button>
+              <div class="calendar-month">July 2025</div>
+              <button class="calendar-nav">›</button>
+            </div>
+            <div class="calendar-grid">
+              <div class="calendar-day-header">MON</div>
+              <div class="calendar-day-header">TUE</div>
+              <div class="calendar-day-header">WED</div>
+              <div class="calendar-day-header">THU</div>
+              <div class="calendar-day-header">FRI</div>
+              <div class="calendar-day selected has-event">3</div>
+              <div class="calendar-day today">4</div>
+              <div class="calendar-day">5</div>
+              <div class="calendar-day">6</div>
+              <div class="calendar-day">7</div>
+              <div class="calendar-day">8</div>
+              <div class="calendar-day">9</div>
+              <div class="calendar-day">10</div>
+              <div class="calendar-day">11</div>
+              <div class="calendar-day">12</div>
+              <div class="calendar-day">13</div>
+              <div class="calendar-day">14</div>
+              <div class="calendar-day">15</div>
+              <div class="calendar-day">16</div>
+              <div class="calendar-day">17</div>
+              <div class="calendar-day">18</div>
+              <div class="calendar-day">19</div>
+              <div class="calendar-day">20</div>
+              <div class="calendar-day">21</div>
+              <div class="calendar-day">22</div>
+              <div class="calendar-day">23</div>
+              <div class="calendar-day">24</div>
+              <div class="calendar-day">25</div>
+              <div class="calendar-day">26</div>
+              <div class="calendar-day">27</div>
+              <div class="calendar-day">28</div>
+              <div class="calendar-day">29</div>
+              <div class="calendar-day">30</div>
+              <div class="calendar-day">31</div>
+            </div>
+            <div class="found-favs">
+
+              <div class="history-title">
+                <span class="title-text">Found Favs</span>
+                <span class="date-text">3. July 2025</span>
+              </div>
+
+              <div class="favs-list">
+                <div class="fav-item">
+                  <div class="fav-icon"></div>
+                  <div>
+                    <div style="font-weight: 600;">DateNight</div>
+                    <div style="font-size: 12px; color: #8e8e93;">3. July 2025</div>
+                  </div>
+                </div>
+                <div class="fav-item">
+                  <div class="fav-icon"></div>
+                  <div>
+                    <div style="font-weight: 600;">Sommer2025</div>
+                    <div style="font-size: 12px; color: #8e8e93;">3. July 2025</div>
+                  </div>
+                </div>
+                <div class="fav-item">
+                  <div class="fav-icon"></div>
+                  <div>
+                    <div style="font-weight: 600;">OFOTD</div>
+                    <div style="font-size: 12px; color: #8e8e93;">3. July 2025</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="show-all-button">Show All Items</button>
+          </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal-sheet" id="share-modal">
+          <div class="share-modal-content">
+            <div class="share-header">
+              <button class="share-cancel" onclick="closeModal('share-modal')">Cancel</button>
+              <div class="share-title" id="share-outfit-name">DATENIGHT</div>
+              <button class="share-settings">⚙️ Setting</button>
+            </div>
+            
+            <div class="outfit-canvas" id="outfit-canvas"></div>
+            
+            <button class="share-button-new">Share</button>
+          </div>
+        </div>
+
+        <!-- Demo Introduction Overlay -->
+        <div class="demo-intro" id="demo-intro">
+          <div class="intro-title">Welcome to WARdrop. App Demo!</div>
+          <div class="intro-text">
+            Explore this interactive fashion wardrobe app. Here's what you can do:
+          </div>
+          <ul class="intro-tips">
+            <li>🏠 <strong>Home:</strong> Check weather, browse dashboard, and quick actions</li>
+            <li>⭐ <strong>Favorites:</strong> View saved outfits and share them</li>
+            <li>👔 <strong>Collections:</strong> Browse your wardrobe by category</li>
+            <li>🔍 <strong>Interactive elements</strong> show pointer cursor on hover</li>
+            <li>📱 <strong>Tap cards and buttons</strong> to navigate and explore</li>
+          </ul>
+          <button class="start-demo-btn" onclick="startDemo()">Start Exploring</button>
+        </div>
+
+        
+      </div>
+      <!-- Fixed buttons for add/camera within the phone screen -->
+      <button class="add-button-fixed" id="add-button-favorites">+</button>
+      <button class="add-button-fixed" id="add-button-collections">📷</button>
+    </div>
+  </div>
+
+  <script>
+    let currentTab = 'home';
+    let selectedCategory = null;
+     let allFavorites = [
+      {
+        name: 'DateNight',
+        date: '3. Jul 2025',
+        items: [
+          { 
+            name: 'Brown Ts', 
+            brand: 'Berschka', 
+            style: "background-image: url('item/shirt/shirt.png');",
+            type: 'shirt'
+          },
+          { 
+            name: 'Blue Jeans', 
+            brand: 'H&M', 
+            style: "background-image: url('item/jeans/bershka1.png');",
+            type: 'jeans'
+          },
+          { 
+            name: 'Samba', 
+            brand: 'Adidas', 
+            style: "background-image: url('item/shoes/samba.png');",
+            type: 'shoes'
+          },
+          { 
+            name: 'Sunglass', 
+            brand: 'Ray Ban', 
+            style: "background-image: url('item/acessories/glass.png');",
+            type: 'accessory'
+          }
+        ]
+      },
+      {
+        name: 'Sommer2025',
+        date: '3. Jul 2025',
+        items: [
+          { 
+            name: 'White Tee', 
+            brand: 'Berschka', 
+            style: "background-image: url('item/shirt/shirt4.png');",
+            type: 'shirt'
+          },
+          { 
+            name: 'Black Jeans', 
+            brand: 'H&M', 
+            style: "background-image: url('item/jeans/bershka2.png');",
+            type: 'jeans'
+          },
+          { 
+            name: 'All Star', 
+            brand: 'Converse', 
+            style: "background-image: url('item/shoes/converse.png');",
+            type: 'shoes'
+          }
+        ]
+      },
+      {
+        name: 'OFOTD',
+        date: '3. Jul 2025',
+        items: [
+          { 
+            name: 'White Shirt', 
+            brand: 'Berschka', 
+            style: "background-image: url('item/shirt/shirt4.png');",
+            type: 'shirt'
+          },
+          { 
+            name: 'White Jeans', 
+            brand: 'H&M', 
+            style: "background-image: url('item/jeans/bershka3.png');",
+            type: 'jeans'
+          },
+          { 
+            name: '510', 
+            brand: 'New Balance', 
+            style: "background-image: url('item/shoes/newBalance.png');",
+            type: 'shoes'
+          },
+          { 
+            name: 'Chain', 
+            brand: 'Chris', 
+            style: "background-image: url('item/acessories/chain.png');",
+            type: 'accessory'
+          }
+        ]
+      },
+      {
+        name: 'Festive Look',
+        date: '3. Jul 2025',
+        items: [
+          { 
+            name: 'Black Tee', 
+            brand: 'Berschka', 
+            style: "background-image: url('item/shirt/shirt2.png');",
+            type: 'shirt'
+          },
+          { 
+            name: 'Black Jeans', 
+            brand: 'Bershka', 
+            style: "background-image: url('item/jeans/bershka.png');",
+            type: 'jeans'
+          },
+          { 
+            name: 'Sude', 
+            brand: 'Puma', 
+            style: "background-image: url('item/shoes/puma.png');",
+            type: 'shoes'
+          },
+          { 
+            name: 'Chain', 
+            brand: 'Chris', 
+            style: "background-image: url('item/acessories/chain.png');",
+            type: 'accessory'
+          },
+          { 
+            name: 'Sunglass', 
+            brand: 'Ray Ban', 
+            style: "background-image: url('item/acessories/glass.png');",
+            type: 'accessory'
+          }
+        ]
+      }
+    ];
+
+    function searchFavorites(searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      const filteredFavorites = allFavorites.filter(outfit => 
+        outfit.name.toLowerCase().includes(searchLower) ||
+        outfit.items.some(item => 
+          item.name.toLowerCase().includes(searchLower) ||
+          item.brand.toLowerCase().includes(searchLower)
+        )
+      );
+      
+      renderFavorites(filteredFavorites);
+    }
+
+    function openShareModal(outfitName) {
+      const outfit = allFavorites.find(o => o.name === outfitName);
+      if (outfit) {
+        updateShareModal(outfit);
+        openModal('share-modal');
+      }
+    }
+
+    function updateShareModal(outfit) {
+      document.getElementById('share-outfit-name').textContent = outfit.name.toUpperCase();
+      const canvas = document.getElementById('outfit-canvas');
+      canvas.innerHTML = '';
+      
+      const profilePiece = document.createElement('div');
+      profilePiece.className = 'outfit-piece share-profile-piece';
+      profilePiece.innerHTML = `
+        <div class="profile-image">
+          <img src="./profile/profile.png" alt="Profile Image" />
+        </div>
+      `;
+      canvas.appendChild(profilePiece);
+      
+      const positions = {
+        'shirt': { className: 'share-shirt-piece', defaultStyle: 'top:60px; left:40px; width:140px; transform:rotate(-5deg);' },
+        'jeans': { className: 'share-jeans-piece', defaultStyle: 'top:200px; left:60px; width:120px; transform:rotate(-3deg);' },
+        'shoes': { className: 'share-shoes-piece', defaultStyle: 'bottom:120px; left:30px; width:140px; transform:rotate(-8deg);' },
+        'accessory': { className: 'share-accessory-piece', defaultStyle: 'top:120px; right:80px; width:100px; transform:rotate(15deg);' },
+      };
+      
+      outfit.items.forEach(item => {
+        const typeData = positions[item.type];
+        if (typeData) {
+          const piece = document.createElement('div');
+          piece.className = `outfit-piece ${typeData.className}`;
+          const imageUrlMatch = item.style.match(/url\(['"]?(.*?)['"]?\)/);
+          const imageUrl = imageUrlMatch ? imageUrlMatch[1] : '';
+
+          piece.innerHTML = `
+            <img src="${imageUrl}" alt="${item.name}" style="width: 100%; height: auto;">
+          `;
+          piece.style.cssText = typeData.defaultStyle;
+          canvas.appendChild(piece);
+        }
+      });
+
+      addDragFunctionality(canvas);
+    }
+
+    function addDragFunctionality(container) {
+      let activeItem = null;
+      let initialX, initialY;
+      let xOffset = 0, yOffset = 0;
+
+      function dragStart(e) {
+        if (e.target.classList.contains('outfit-piece')) {
+          activeItem = e.target;
+          activeItem.classList.add('dragging');
+
+          if (e.type === "touchstart") {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+          } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+          }
+
+          const rect = activeItem.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          xOffset = e.clientX - (rect.left - containerRect.left);
+          yOffset = e.clientY - (rect.top - containerRect.top);
+        }
+      }
+
+      function dragEnd(e) {
+        if (activeItem) {
+          activeItem.classList.remove('dragging');
+          activeItem = null;
+        }
+      }
+
+      function drag(e) {
+        if (activeItem) {
+          e.preventDefault();
+          let currentX, currentY;
+
+          if (e.type === "touchmove") {
+            currentX = e.touches[0].clientX - initialX;
+            currentY = e.touches[0].clientY - initialY;
+          } else {
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+          }
+
+          const containerRect = container.getBoundingClientRect();
+          const newLeft = e.clientX - containerRect.left - xOffset;
+          const newTop = e.clientY - containerRect.top - yOffset;
+
+          activeItem.style.left = `${newLeft}px`;
+          activeItem.style.top = `${newTop}px`;
+        }
+      }
+
+      container.addEventListener("mousedown", dragStart, false);
+      container.addEventListener("mouseup", dragEnd, false);
+      container.addEventListener("mousemove", drag, false);
+
+      container.addEventListener("touchstart", dragStart, false);
+      container.addEventListener("touchend", dragEnd, false);
+      container.addEventListener("touchmove", drag, false);
+    }
+
+    function renderFavorites(favorites) {
+      const container = document.getElementById('favorites-list');
+      if (!container) return;
+      
+      container.innerHTML = favorites.map(outfit => `
+        <div class="outfit-card" onclick="toggleOutfit(this)">
+          <div class="outfit-header">
+            <div>
+              <div class="outfit-name">${outfit.name}</div>
+              <div class="outfit-date">${outfit.date}</div>
+            </div>
+            <div class="expand-icon">⌄</div>
+          </div>
+          <div class="outfit-details">
+            <div class="outfit-items">
+              ${outfit.items.map(item => `
+                <div class="outfit-item">
+                  <div class="outfit-item-image" style="${item.style}"></div>
+                  <div class="outfit-item-name">${item.name}</div>
+                  <div class="outfit-item-brand">${item.brand}</div>
+                </div>
+              `).join('')}
+            </div>
+            <button class="share-button" onclick="event.stopPropagation(); openShareModal('${outfit.name}')">
+              📤 Share
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      if (favorites.length === 0) {
+        container.innerHTML = `
+          <div class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <div class="no-results-text">No outfits found</div>
+            <div class="no-results-subtitle">Try a different search term</div>
+          </div>
+        `;
+      }
+    }
+
+    function openDemo() {
+      const modal = document.getElementById('modal');
+      const intro = document.getElementById('demo-intro');
+
+      modal.style.display = 'flex'; // show modal container
+      intro.style.display = 'flex'; // ensure intro is visible before fading in
+
+      setTimeout(() => {
+        intro.classList.add('show'); // trigger fade-in
+      }, 10); // slight delay allows CSS transition to run
+    }
+
+    
+    //Start Exploring
+    function startDemo() {
+      const intro = document.getElementById('demo-intro');
+
+      intro.classList.remove('show'); // trigger fade-out
+
+      // After transition, hide the element
+      setTimeout(() => {
+        intro.style.display = 'none';
+        loadHomeContent();
+      }, 500); // match CSS transition duration (0.5s)
+    }
+
+    function closeDemo() {
+      document.getElementById('modal').style.display = 'none';
+      closeAllModals();
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('show');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+
+    function closeAllModals() {
+        const modals = document.querySelectorAll('.modal-sheet');
+        modals.forEach(modal => modal.classList.remove('show'));
+    }
+
+    function toggleOutfit(element) {
+      element.classList.toggle('expanded');
+    }
+
+    function toggleCollection(element) {
+      element.classList.toggle('expanded');
+    }
+
+    function filterCategory(button, category) {
+      if (button.classList.contains('active')) {
+        button.classList.remove('active');
+        selectedCategory = null;
+        updateCollectionList();
+      } else {
+        document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        selectedCategory = category;
+        updateCollectionList();
+      }
+    }
+
+    function updateCollectionList() {
+      const collectionsData = getCollectionsData();
+      const listContainer = document.getElementById('collection-list');
+      
+      if (selectedCategory && collectionsData[selectedCategory]) {
+        listContainer.innerHTML = collectionsData[selectedCategory];
+      } else {
+        listContainer.innerHTML = collectionsData.all;
+      }
+    }
+
+    function getCollectionsData() {
+      return {
+        all: `
+          <div class="collection-item" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Accessory</div>
+              <div class="expand-icon">›</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/glass1.png');"></div>
+                <div class="collection-product-name">Sunglasses</div>
+                <div class="collection-product-brand">Ray Band</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/cap.png');"></div>
+                <div class="collection-product-name">Cap</div>
+                <div class="collection-product-brand">New Era</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/belt.png');"></div>
+                <div class="collection-product-name">Belt</div>
+                <div class="collection-product-brand">Karl Kani</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/chain.png');"></div>
+                <div class="collection-product-name">Gold Chain</div>
+                <div class="collection-product-brand">Guss</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/glass.png');"></div>
+                <div class="collection-product-name">Sunglasses</div>
+                <div class="collection-product-brand">Ray Band</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/ring.png');"></div>
+                <div class="collection-product-name">Silver Ring</div>
+                <div class="collection-product-brand">Christ</div>
+              </div>
+            </div>
+          </div>
+          <div class="collection-item" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Jeans</div>
+              <div class="expand-icon">›</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka1.png');"></div>
+                <div class="collection-product-name">Blue Jeans</div>
+                <div class="collection-product-brand">H&M</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka.png');"></div>
+                <div class="collection-product-name">Black Jeans</div>
+                <div class="collection-product-brand">Levi's</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka3.png');"></div>
+                <div class="collection-product-name">Light Wash</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka4.png');"></div>
+                <div class="collection-product-name">Wash</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+            </div>
+          </div>
+          <div class="collection-item" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Shirt</div>
+              <div class="expand-icon">›</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt.png');"></div>
+                <div class="collection-product-name">Brown Ts</div>
+                <div class="collection-product-brand">Berschka</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt3.png');"></div>
+                <div class="collection-product-name">Blue Polo</div>
+                <div class="collection-product-brand">Ralph Lauren</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt1.png');"></div>
+                <div class="collection-product-name">Summer Tee</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt2.png');"></div>
+                <div class="collection-product-name">Black Tee</div>
+                <div class="collection-product-brand">Berschka</div>
+              </div>
+            </div>
+          </div>
+          <div class="collection-item" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Shoes</div>
+              <div class="expand-icon">›</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/samba.png');"></div>
+                <div class="collection-product-name">Samba</div>
+                <div class="collection-product-brand">Adidas</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/puma.png');"></div>
+                <div class="collection-product-name">Sude</div>
+                <div class="collection-product-brand">Puma</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/nikeSkate.png');"></div>
+                <div class="collection-product-name">Nike SB</div>
+                <div class="collection-product-brand">Nike</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/newBalance.png');"></div>
+                <div class="collection-product-name">550</div>
+                <div class="collection-product-brand">New Balance</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/converse.png');"></div>
+                <div class="collection-product-name">Allstar</div>
+                <div class="collection-product-brand">Converse</div>
+              </div>
+            </div>
+          </div>
+        `,
+        accessory: `
+          <div class="collection-item expanded" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Accessory</div>
+              <div class="expand-icon">⌄</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/glass1.png');"></div>
+                <div class="collection-product-name">Sunglasses</div>
+                <div class="collection-product-brand">Ray Band</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/cap.png');"></div>
+                <div class="collection-product-name">Cap</div>
+                <div class="collection-product-brand">New Era</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/belt.png');"></div>
+                <div class="collection-product-name">Belt</div>
+                <div class="collection-product-brand">Karl Kani</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/chain.png');"></div>
+                <div class="collection-product-name">Gold Chain</div>
+                <div class="collection-product-brand">Guss</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/glass.png');"></div>
+                <div class="collection-product-name">Sunglasses</div>
+                <div class="collection-product-brand">Ray Band</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/acessories/ring.png');"></div>
+                <div class="collection-product-name">Silver Ring</div>
+                <div class="collection-product-brand">Christ</div>
+              </div>
+            </div>
+          </div>
+        `,
+        jeans: `
+          <div class="collection-item expanded" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Jeans</div>
+              <div class="expand-icon">⌄</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka1.png');"></div>
+                <div class="collection-product-name">Blue Jeans</div>
+                <div class="collection-product-brand">H&M</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka.png');"></div>
+                <div class="collection-product-name">Black Jeans</div>
+                <div class="collection-product-brand">Levi's</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka3.png');"></div>
+                <div class="collection-product-name">Light Wash</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/jeans/bershka4.png');"></div>
+                <div class="collection-product-name">Wash</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+            </div>
+          </div>
+        `,
+        shirt: `
+          <div class="collection-item expanded" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Shirt</div>
+              <div class="expand-icon">⌄</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt.png');"></div>
+                <div class="collection-product-name">Brown Ts</div>
+                <div class="collection-product-brand">Berschka</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt3.png');"></div>
+                <div class="collection-product-name">Blue Polo</div>
+                <div class="collection-product-brand">Ralph Lauren</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt1.png');"></div>
+                <div class="collection-product-name">Summer Tee</div>
+                <div class="collection-product-brand">Zara</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shirt/shirt2.png');"></div>
+                <div class="collection-product-name">Black Tee</div>
+                <div class="collection-product-brand">Berschka</div>
+              </div>
+            </div>
+          </div>
+        `,
+        shoes: `
+          <div class="collection-item expanded" onclick="toggleCollection(this)">
+            <div class="collection-header">
+              <div class="collection-name">Shoes</div>
+              <div class="expand-icon">⌄</div>
+            </div>
+            <div class="collection-expanded">
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/samba.png');"></div>
+                <div class="collection-product-name">Samba</div>
+                <div class="collection-product-brand">Adidas</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/puma.png');"></div>
+                <div class="collection-product-name">Sude</div>
+                <div class="collection-product-brand">Puma</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/nikeSkate.png');"></div>
+                <div class="collection-product-name">Nike SB</div>
+                <div class="collection-product-brand">Nike</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/newBalance.png');"></div>
+                <div class="collection-product-name">550</div>
+                <div class="collection-product-brand">New Balance</div>
+              </div>
+              <div class="collection-product">
+                <div class="collection-product-image" style="background-image: url('item/shoes/converse.png');"></div>
+                <div class="collection-product-name">Allstar</div>
+                <div class="collection-product-brand">Converse</div>
+              </div>
+            </div>
+          </div>
+        `
+      };
+    }
+
+    function switchTab(tab, element) {
+      currentTab = tab;
+      
+      document.querySelectorAll('.tab-item').forEach(item => {
+        item.classList.remove('active');
+        const icon = item.querySelector('.tab-icon');
+        if (icon) icon.style.filter = 'grayscale(100%)';
+        const label = item.querySelector('.tab-label');
+        if (label) label.style.color = 'var(--gray-dark)';
+      });
+      element.classList.add('active');
+      const activeIcon = element.querySelector('.tab-icon');
+      if (activeIcon) activeIcon.style.filter = 'grayscale(0%)';
+      const activeLabel = element.querySelector('.tab-label');
+      if (activeLabel) activeLabel.style.color = 'var(--text-light)';
+
+      document.getElementById('add-button-favorites').style.display = 'none';
+      document.getElementById('add-button-collections').style.display = 'none';
+
+      if (tab === 'home') {
+        loadHomeContent();
+      } else if (tab === 'favorites') {
+        loadFavoritesContent();
+        document.getElementById('add-button-favorites').style.display = 'flex';
+      } else if (tab === 'collections') {
+        selectedCategory = null;
+        loadCollectionsContent();
+        document.getElementById('add-button-collections').style.display = 'flex';
+      }
+    }
+
+    function loadHomeContent() {
+      document.getElementById('main-content').innerHTML = `
+        <div class="home-content">
+          <div class="greeting">
+            <div class="greeting-top">
+              <div class="user-name">@seannjr</div>
+            </div>
+            <div class="main-title-container">
+              <div class="main-title">GOOD AFTERNOON</div>
+              <div class="profile-icon-main">
+                <img src="./profile/profile.png" alt="Profile Image" />
+              </div>
+            </div>
+          </div>
+
+          <div class="home-top-cards">
+            <div class="home-card weather-card-home" onclick="openModal('weather-modal')">
+              <div class="weather-location">Bonn</div>
+              <div class="weather-condition">Clear sky</div>
+              <div class="weather-temp">
+                <span>27°</span>
+                <span>☀️</span>
+              </div>
+            </div>
+            <div class="home-card outfit-suggestion-card">
+              It's sunny and bright,<br>pick an outfit that keeps<br>you cool and fashionable.
+            </div>
+          </div>
+
+          <div class="dashboard-title">Dashboard</div>
+
+          <div class="clothing-grid">
+            <div class="clothing-item">
+              <div class="clothing-icon">
+                <img src="icon/shirt.png" alt="Shirt" />
+              </div>
+              <div class="clothing-name">Shirt</div>
+              <div class="clothing-count">4 items</div>
+            </div>
+            <div class="clothing-item">
+              <div class="clothing-icon">
+                <img src="icon/jeans.png" alt="Jeans" />
+              </div>
+              <div class="clothing-name">Jeans</div>
+              <div class="clothing-count">3 items</div>
+            </div>
+            <div class="clothing-item">
+              <div class="clothing-icon">
+                <img src="icon/shoes.png" alt="Shoes" />
+              </div>
+              <div class="clothing-name">Shoes</div>
+              <div class="clothing-count">5 items</div>
+            </div>
+            <div class="clothing-item">
+              <div class="clothing-icon">
+                <img src="icon/accessory.png" alt="Accessory" />
+              </div>
+              <div class="clothing-name">Accessory</div>
+              <div class="clothing-count">4 items</div>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+
+            <div class="action-card favorites">
+              <div class="action-icon">
+                <img src="./icon/yellostar.png" alt="Favorites Icon" />
+              </div>
+              <div class="action-content">
+                <div class="action-title">My Favs</div>
+                <div class="action-count">6 favorites</div>
+              </div>
+            </div>
+
+            <div class="action-card collections">
+              <div class="action-icon">
+                <img src="./icon/hanger.png" alt="Collections Icon" />
+              </div>
+              <div class="action-content">
+                <div class="action-title">My Collections</div>
+                <div class="action-count">16 items</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="get-dressed">Let's get dressed!</div>
+          
+          <div class="dress-up-cards">
+            <div class="dress-card weather-card-main" onclick="openModal('weather-modal')">
+              <div class="dress-card-icon">☀️</div>
+              <div class="dress-card-content">
+                <div class="dress-card-title">Check Weather</div>
+                <div class="dress-card-subtitle">Check the weather in your location</div>
+              </div>
+            </div>
+            <div class="dress-card dress-up-card" onclick="switchTab('favorites', document.querySelector('.tab-item:nth-child(2)'))">
+              <div class="dress-card-graphics">
+                <div class="graphic-shape shape-1"></div>
+                <div class="graphic-shape shape-2"></div>
+                <div class="graphic-shape shape-3"></div>
+                <div class="graphic-shape shape-4"></div>
+              </div>
+              <div class="dress-card-content">
+                <div class="dress-card-title">Dress Up</div>
+                <div class="dress-card-subtitle">Check out your favorite outfits</div>
+              </div>
+            </div>
+            <div class="dress-card creative-card" onclick="switchTab('collections', document.querySelector('.tab-item:nth-child(3)'))">
+              <div class="creative-graphics">
+                <div class="creative-brush">🎨</div>
+                <div class="creative-sparkle">✨</div>
+                <div class="creative-magic">💫</div>
+              </div>
+              <div class="dress-card-content">
+                <div class="dress-card-title">Be Creative</div>
+                <div class="dress-card-subtitle">Mix and match new styles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('add-button-favorites').style.display = 'none';
+      document.getElementById('add-button-collections').style.display = 'none';
+    }
+
+    function loadFavoritesContent() {
+      document.getElementById('main-content').innerHTML = `
+        <div class="favorites-content">
+          <div class="page-header">
+            <div class="page-title-container">
+              <div class="page-subtitle">6 FAV ITEMS</div>
+              <div class="page-title">YOUR FAVS</div>
+            </div>
+            
+          </div>
+
+          <div class="search-bar">
+            <div class="search-input-wrapper">
+              <span class="search-icon-left">🔍</span>
+
+              <input type="text" class="search-input" placeholder="Search Favs" oninput="searchFavorites(this.value)">
+              
+            </div>
+            <button class="date-filter" onclick="openModal('calendar-modal')">
+              <span class="date-emoji">📅</span> Date
+            </button>
+
+          </div>
+
+          <div class="favorites-list" id="favorites-list"></div>
+
+        </div>
+      `;
+      
+      renderFavorites(allFavorites);
+    }
+
+    function loadCollectionsContent() {
+      document.getElementById('main-content').innerHTML = `
+        <div class="collections-content">
+          <div class="page-header">
+            <div class="page-title-container">
+              <div class="page-subtitle">16 COLLECTIONS</div>
+              <div class="page-title">YOUR CLOSET</div>
+            </div>
+            
+          </div>
+
+          <div class="category-filters">
+            <button class="category-filter" onclick="filterCategory(this, 'accessory')">Accessory</button>
+            <button class="category-filter" onclick="filterCategory(this, 'jeans')">Jeans</button>
+            <button class="category-filter" onclick="filterCategory(this, 'shirt')">Shirt</button>
+            <button class="category-filter" onclick="filterCategory(this, 'shoes')">Shoes</button>
+          </div>
+
+          <div class="collection-list" id="collection-list">
+            <!-- Content will be filtered based on selected category -->
+          </div>
+
+        </div>
+      `;
+      
+      updateCollectionList();
+    }
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal')) {
+        closeDemo();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadHomeContent();
+    });
+  </script>
+
+
+
+</body>
+</html>
